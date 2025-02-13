@@ -1,0 +1,401 @@
+-- Drop the database if it exists
+DROP DATABASE IF EXISTS zqa;
+
+-- Create the database
+CREATE DATABASE zqa;
+USE zqa;
+
+-- Drop existing functions and procedures
+DROP FUNCTION IF EXISTS check_multiple_choice_answer;
+DROP PROCEDURE IF EXISTS submit_multiple_choice_answer;
+
+-- Create base tables
+CREATE TABLE `users` (
+    `user_id` INT NOT NULL AUTO_INCREMENT,
+    `username` VARCHAR(50) NOT NULL,
+    `email` VARCHAR(100) NOT NULL,
+    `password` VARCHAR(255) NOT NULL,
+    `role` ENUM('admin', 'teacher', 'student') NOT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`user_id`),
+    UNIQUE (`username`),
+    UNIQUE (`email`)
+);
+
+CREATE TABLE `subjects` (
+    `subject_id` INT NOT NULL AUTO_INCREMENT,
+    `subject_name` VARCHAR(50) NOT NULL,
+    `subject_code` VARCHAR(10) NOT NULL,
+    PRIMARY KEY (`subject_id`),
+    UNIQUE (`subject_code`)
+);
+
+CREATE TABLE `grades` (
+    `grade_id` INT NOT NULL AUTO_INCREMENT,
+    `grade_name` VARCHAR(10) NOT NULL,
+    `education_level` ENUM('pre-school', 'primary', 'secondary', 'tertiary') NOT NULL,
+    PRIMARY KEY (`grade_id`),
+    UNIQUE (`grade_name`)
+);
+
+CREATE TABLE `exams` (
+    `exam_id` INT NOT NULL AUTO_INCREMENT,
+    `subject_id` INT NOT NULL,
+    `grade_id` INT NOT NULL,
+    `year` INT NOT NULL,
+    `term` VARCHAR(20) NOT NULL,
+    `exam_code` VARCHAR(50) NOT NULL,
+    PRIMARY KEY (`exam_id`),
+    UNIQUE (`exam_code`),
+    FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`subject_id`),
+    FOREIGN KEY (`grade_id`) REFERENCES `grades` (`grade_id`)
+);
+
+CREATE TABLE `questionpapers` (
+    `paper_id` INT NOT NULL AUTO_INCREMENT,
+    `exam_id` INT NOT NULL,
+    `paper_number` INT NOT NULL,
+    `paper_type` VARCHAR(50) NOT NULL,
+    `duration_minutes` INT DEFAULT 180,
+    `total_marks` DECIMAL(5,2) NOT NULL,
+    PRIMARY KEY (`paper_id`),
+    UNIQUE (`exam_id`, `paper_number`),
+    FOREIGN KEY (`exam_id`) REFERENCES `exams` (`exam_id`)
+);
+
+CREATE TABLE `sections` (
+    `section_id` INT NOT NULL AUTO_INCREMENT,
+    `paper_id` INT NOT NULL,
+    `section_name` VARCHAR(50) NOT NULL,
+    `section_number` INT NOT NULL,
+    `marks` DECIMAL(5,2) NOT NULL,
+    PRIMARY KEY (`section_id`),
+    FOREIGN KEY (`paper_id`) REFERENCES `questionpapers` (`paper_id`)
+);
+
+CREATE TABLE `questions` (
+    `question_id` INT NOT NULL AUTO_INCREMENT,
+    `section_id` INT NOT NULL,
+    `question_number` INT NOT NULL,
+    `question_text` TEXT NOT NULL,
+    `marks` DECIMAL(5,2) NOT NULL,
+    `question_type` ENUM('multiple_choice', 'short_answer', 'long_answer', 'true_false') NOT NULL,
+    PRIMARY KEY (`question_id`),
+    FOREIGN KEY (`section_id`) REFERENCES `sections` (`section_id`)
+);
+
+CREATE TABLE answers (
+    answer_id INT NOT NULL AUTO_INCREMENT,
+    question_id INT NOT NULL,
+    answer_text TEXT NOT NULL,
+    is_correct BOOLEAN NOT NULL,
+    explanation TEXT,
+    PRIMARY KEY (answer_id),
+    FOREIGN KEY (question_id) REFERENCES questions (question_id) ON DELETE CASCADE
+);
+
+CREATE TABLE question_bank (
+    bank_id INT NOT NULL AUTO_INCREMENT,
+    question_text TEXT NOT NULL,
+    marks DECIMAL(5,2) NOT NULL,
+    question_type ENUM('multiple_choice', 'short_answer', 'long_answer', 'true_false') NOT NULL,
+    PRIMARY KEY (bank_id)
+);
+
+CREATE TABLE `user_exam_progress` (
+    `exam_progress_id` INT NOT NULL AUTO_INCREMENT,
+    `user_id` INT NOT NULL,
+    `exam_id` INT NOT NULL,
+    `start_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `end_time` TIMESTAMP NULL,
+    `total_score` DECIMAL(5,2) DEFAULT NULL,
+    PRIMARY KEY (`exam_progress_id`),
+    FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
+    FOREIGN KEY (`exam_id`) REFERENCES `exams` (`exam_id`)
+);
+
+CREATE TABLE `user_paper_progress` (
+    `paper_progress_id` INT NOT NULL AUTO_INCREMENT,
+    `exam_progress_id` INT NOT NULL,
+    `paper_id` INT NOT NULL,
+    `score` DECIMAL(5,2) DEFAULT NULL,
+    PRIMARY KEY (`paper_progress_id`),
+    FOREIGN KEY (`exam_progress_id`) REFERENCES `user_exam_progress` (`exam_progress_id`),
+    FOREIGN KEY (`paper_id`) REFERENCES `questionpapers` (`paper_id`)
+);
+
+CREATE TABLE `user_answers` (
+    `user_answer_id` INT NOT NULL AUTO_INCREMENT,
+    `paper_progress_id` INT NOT NULL,
+    `question_id` INT NOT NULL,
+    `answer_text` TEXT NOT NULL,
+    `marks_obtained` DECIMAL(5,2) DEFAULT NULL,
+    PRIMARY KEY (`user_answer_id`),
+    FOREIGN KEY (`paper_progress_id`) REFERENCES `user_paper_progress` (`paper_progress_id`),
+    FOREIGN KEY (`question_id`) REFERENCES `questions` (`question_id`)
+);
+
+CREATE TABLE assigned_work (
+    assignment_id INT NOT NULL AUTO_INCREMENT,
+    teacher_id INT NOT NULL,
+    student_id INT NOT NULL,
+    exam_id INT NULL,
+    paper_id INT NULL,
+    question_id INT NULL,
+    due_date DATETIME NOT NULL,
+    status ENUM('pending', 'completed') DEFAULT 'pending',
+    PRIMARY KEY (assignment_id),
+    FOREIGN KEY (teacher_id) REFERENCES users(user_id),
+    FOREIGN KEY (student_id) REFERENCES users(user_id),
+    FOREIGN KEY (exam_id) REFERENCES exams(exam_id),
+    FOREIGN KEY (paper_id) REFERENCES questionpapers(paper_id),
+    FOREIGN KEY (question_id) REFERENCES questions(question_id)
+);
+
+CREATE TABLE `student_performance` (
+    `performance_id` INT NOT NULL AUTO_INCREMENT,
+    `user_id` INT NOT NULL,
+    `grade_id` INT NOT NULL,
+    `school_id` INT NOT NULL,  -- Assuming each student belongs to a school
+    `total_score` DECIMAL(10,2) DEFAULT 0,
+    `class_rank` INT DEFAULT NULL,
+    `school_rank` INT DEFAULT NULL,
+    `district_rank` INT DEFAULT NULL,
+    `last_updated` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`performance_id`),
+    FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
+    FOREIGN KEY (`grade_id`) REFERENCES `grades` (`grade_id`)
+);
+
+
+-- Create helper functions
+DELIMITER //
+
+CREATE FUNCTION check_multiple_choice_answer(
+    question_id_param INT,
+    student_answer TEXT
+) 
+RETURNS DECIMAL(5,2)
+DETERMINISTIC
+BEGIN
+    DECLARE marks_awarded DECIMAL(5,2);
+    
+    SELECT 
+        CASE 
+            WHEN a.answer_text = student_answer THEN q.marks
+            ELSE 0
+        END INTO marks_awarded
+    FROM questions q
+    JOIN answers a ON q.question_id = a.question_id
+    WHERE q.question_id = question_id_param 
+    AND a.is_correct = true;
+    
+    RETURN COALESCE(marks_awarded, 0);
+END//
+
+CREATE PROCEDURE submit_multiple_choice_answer(
+    IN paper_progress_id_param INT,
+    IN question_id_param INT,
+    IN student_answer TEXT
+)
+BEGIN
+    DECLARE marks_obtained DECIMAL(5,2);
+    DECLARE paper_id_param INT;
+    
+    -- Get the paper_id for the given paper_progress_id
+    SELECT paper_id INTO paper_id_param
+    FROM user_paper_progress
+    WHERE paper_progress_id = paper_progress_id_param;
+    
+    -- Ensure the question belongs to the paper
+    IF NOT EXISTS (
+        SELECT 1
+        FROM questions q
+        JOIN sections s ON q.section_id = s.section_id
+        JOIN questionpapers qp ON s.paper_id = qp.paper_id
+        WHERE q.question_id = question_id_param
+        AND qp.paper_id = paper_id_param
+    ) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Question does not belong to the specified paper.';
+    END IF;
+    
+    -- Get marks for the answer
+    SET marks_obtained = check_multiple_choice_answer(question_id_param, student_answer);
+    
+    -- Insert the student's answer and marks
+    INSERT INTO user_answers 
+    (paper_progress_id, question_id, answer_text, marks_obtained)
+    VALUES 
+    (paper_progress_id_param, question_id_param, student_answer, marks_obtained);
+    
+    -- Update the paper progress total score
+    UPDATE user_paper_progress
+    SET score = (
+        SELECT SUM(marks_obtained)
+        FROM user_answers
+        WHERE paper_progress_id = paper_progress_id_param
+    )
+    WHERE paper_progress_id = paper_progress_id_param;
+END//
+
+CREATE TRIGGER update_student_performance AFTER INSERT ON user_exam_progress
+FOR EACH ROW
+BEGIN
+    DECLARE total DECIMAL(10,2);
+    
+    -- Calculate total score
+    SELECT SUM(score) INTO total
+    FROM user_paper_progress
+    WHERE exam_progress_id = NEW.exam_progress_id;
+
+    -- Update student_performance table
+    INSERT INTO student_performance (user_id, grade_id, school_id, total_score)
+    VALUES (NEW.user_id, (SELECT grade_id FROM exams WHERE exam_id = NEW.exam_id), 1, total)  -- Assuming school_id = 1
+    ON DUPLICATE KEY UPDATE total_score = total;
+
+    -- Update rankings
+    CALL update_student_ranks();
+END//
+
+CREATE PROCEDURE update_student_ranks()
+BEGIN
+    -- Update class, school, and district ranks
+    CALL update_class_rank();
+    CALL update_school_rank();
+    CALL update_district_rank();
+END//
+
+-- Update Class Rank
+UPDATE student_performance sp
+JOIN (
+    SELECT user_id, 
+           grade_id, 
+           RANK() OVER (PARTITION BY grade_id ORDER BY total_score DESC) AS class_rank
+    FROM student_performance
+) ranked ON sp.user_id = ranked.user_id AND sp.grade_id = ranked.grade_id
+SET sp.class_rank = ranked.class_rank;
+
+-- Update School Rank
+UPDATE student_performance sp
+JOIN (
+    SELECT user_id, 
+           school_id, 
+           RANK() OVER (PARTITION BY school_id ORDER BY total_score DESC) AS school_rank
+    FROM student_performance
+) ranked ON sp.user_id = ranked.user_id AND sp.school_id = ranked.school_id
+SET sp.school_rank = ranked.school_rank;
+
+-- Update District Rank
+UPDATE student_performance sp
+JOIN (
+    SELECT user_id, 
+           RANK() OVER (ORDER BY total_score DESC) AS district_rank
+    FROM student_performance
+) ranked ON sp.user_id = ranked.user_id
+SET sp.district_rank = ranked.district_rank;
+
+DELIMITER ;
+
+-- Insert sample data
+INSERT INTO users (username, email, password, role) VALUES
+('teacher1', 'teacher1@school.com', 'hashed_pwd', 'teacher'),
+('student1', 'student1@school.com', 'hashed_pwd', 'student'),
+('student2', 'student2@school.com', 'hashed_pwd', 'student');
+
+INSERT INTO subjects (subject_name, subject_code) VALUES
+('Mathematics', 'MATH'),
+('Physics', 'PHYS');
+
+INSERT INTO grades (grade_name, education_level) VALUES
+('Grade 10', 'secondary'),
+('Grade 11', 'secondary');
+
+-- Create a Math exam
+INSERT INTO exams (subject_id, grade_id, year, term, exam_code) VALUES
+(1, 1, 2024, 'Term 1', 'MATH-2024-T1-G10');
+
+-- Create two papers for the exam
+INSERT INTO questionpapers (exam_id, paper_number, paper_type, total_marks) VALUES
+(1, 1, 'Multiple Choice', 50),
+(1, 2, 'Theory', 100);
+
+-- Create sections
+INSERT INTO sections (paper_id, section_name, section_number, marks) VALUES
+(1, 'Algebra', 1, 20),
+(1, 'Geometry', 2, 30);
+
+-- Insert multiple choice questions
+INSERT INTO questions (section_id, question_number, question_text, marks, question_type) VALUES
+-- Algebra questions
+(1, 1, 'Solve for x: 2x + 5 = 13', 2, 'multiple_choice'),
+(1, 2, 'What is the value of y in: y² = 16', 2, 'multiple_choice'),
+-- Geometry questions
+(2, 1, 'What is the area of a circle with radius 7?', 2, 'multiple_choice'),
+(2, 2, 'In a right triangle, what is sin(90°)?', 2, 'multiple_choice');
+
+-- Insert answers for each question
+INSERT INTO answers (question_id, answer_text, is_correct, explanation) VALUES
+-- Answers for: Solve for x: 2x + 5 = 13
+(1, '4', true, 'Subtract 5 from both sides: 2x = 8, then divide by 2: x = 4'),
+(1, '3', false, NULL),
+(1, '5', false, NULL),
+(1, '6', false, NULL),
+
+-- Answers for: What is the value of y in: y² = 16
+(2, '4 or -4', true, 'Square root of 16 can be positive or negative 4'),
+(2, '4', false, NULL),
+(2, '-4', false, NULL),
+(2, '8', false, NULL),
+
+-- Answers for: What is the area of a circle with radius 7?
+(3, '153.94', true, 'A = πr², so A = π(7²) ≈ 153.94'),
+(3, '44', false, NULL),
+(3, '14π', false, NULL),
+(3, '49π', false, NULL),
+
+-- Answers for: In a right triangle, what is sin(90°)?
+(4, '1', true, 'sin(90°) = 1 is a fundamental trigonometric value'),
+(4, '0', false, NULL),
+(4, '-1', false, NULL),
+(4, 'undefined', false, NULL);
+
+-- Start an exam for a student
+INSERT INTO user_exam_progress (user_id, exam_id) VALUES
+(2, 1);  -- student1 taking the math exam
+
+INSERT INTO user_paper_progress (exam_progress_id, paper_id) VALUES
+(1, 1);  -- student1 starting paper 1
+
+-- Simulate student answers
+CALL submit_multiple_choice_answer(1, 1, '4');  -- Correct answer
+CALL submit_multiple_choice_answer(1, 2, '4');  -- Incorrect answer
+CALL submit_multiple_choice_answer(1, 3, '153.94');  -- Correct answer
+CALL submit_multiple_choice_answer(1, 4, '0');  -- Incorrect answer
+
+-- Query to check student's performance
+SELECT 
+    q.question_text,
+    ua.answer_text AS student_answer,
+    CASE 
+        WHEN a.is_correct AND ua.answer_text = a.answer_text THEN 'Correct'
+        ELSE 'Incorrect'
+    END AS result,
+    ua.marks_obtained,
+    a.explanation
+FROM user_answers ua
+JOIN questions q ON ua.question_id = q.question_id
+JOIN answers a ON q.question_id = a.question_id
+WHERE ua.paper_progress_id = 1
+AND a.is_correct = true
+ORDER BY q.question_number;
+
+-- Query to get total score
+SELECT 
+    u.username,
+    SUM(ua.marks_obtained) AS total_score,
+    (SELECT SUM(marks) FROM questions WHERE section_id IN (1, 2)) AS total_possible
+FROM users u
+JOIN user_exam_progress uep ON u.user_id = uep.user_id
+JOIN user_paper_progress upp ON uep.exam_progress_id = upp.exam_progress_id
+JOIN user_answers ua ON upp.paper_progress_id = ua.paper_progress_id
+WHERE u.user_id = 2;
