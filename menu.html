@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard Menu</title>
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="script.js"></script>
+    
+</head>
+<body>
+
+    <!-- Navigation Menu -->
+    <nav class="navbar">
+        <div class="logo">Molli</div>
+        
+        <ul class="nav-links">
+            <li>
+                <a href="#">
+                    <svg class="icon" viewBox="0 0 16 16">
+                        <path d="M1 6V15H6V11C6 9.89543 6.89543 9 8 9C9.10457 9 10 9.89543 10 11V15H15V6L8 0L1 6Z" fill="currentColor"/>
+                    </svg>
+                    Dashboard
+                </a>
+            </li>
+
+            <li class="dropdown">
+                <a href="#">
+                    <span class="icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                            <g id="SVGRepo_iconCarrier">
+                                <g fill="currentColor" fill-rule="evenodd">
+                                    <path d="M13 0H3a3.009 3.009 0 0 0-3 3v13.99a3.009 3.009 0 0 0 3 3h10a3.009 3.009 0 0 0 3-3V3a3.009 3.009 0 0 0-3-3zm1 16.99a1.016 1.016 0 0 1-1 1H3a1.016 1.016 0 0 1-1-1V3a1.016 1.016 0 0 1 1-1h10c.549.009.991.451 1 1v13.99z"></path>
+                                    <path d="M20 7v14a3.009 3.009 0 0 1-3 3H5a1 1 0 0 1 0-2h12a1.016 1.016 0 0 0 1-1V7a1 1 0 0 1 2 0z"></path>
+                                    <circle cx="8" cy="15" r="1"></circle>
+                                    <path d="M12 8a3.992 3.992 0 0 1-3 3.87V12a1 1 0 0 1-2 0v-1a1 1 0 0 1 1-1 2 2 0 1 0-2-2 1 1 0 1 1-2 0 4 4 0 1 1 8 0z"></path>
+                                </g>
+                            </g>
+                        </svg>
+                    </span>
+                    Challenges
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="#">My Exams</a></li>
+                    <li><a href="#">My Assignments</a></li>
+                    <li><a href="#">Exam History</a></li>
+                </ul>
+            </li>
+
+            <li class="dropdown">
+                <a href="#">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M23.6 1.8l-2.62 1.969a.97.97 0 0 1 .02.24 2.006 2.006 0 0 1-2 2A.569.569 0 0 1 18.871 6l-1.04 1.559-1.04 1.559c.14.273.211.576.209.882a1.994 1.994 0 0 1-1.88 1.989l-1.45 2.9A2 2 0 1 1 10 16v-.03l-2.03-1.218c-.177.1-.37.172-.57.21L5.95 19.32A1 1 0 0 1 5 20a1.252 1.252 0 0 1-.32-.05 1.01 1.01 0 0 1-.63-1.269l1.45-4.358A2 2 0 1 1 9 13v.03l2.03 1.219c.26-.147.552-.23.85-.24l1.45-2.9A2.006 2.006 0 0 1 15 8.005a.569.569 0 0 1 .13.01l1.04-1.559L17.211 4.9a2 2 0 0 1 2.569-2.732L22.4.2a1 1 0 1 1 1.2 1.6z"/>
+                    </svg>
+                    Progress Tracks
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Performance Reports</a></li>
+                    <li><a href="#">Review Mistakes</a></li>
+                    <li><a href="#">Leadership Ranks</a></li>
+                </ul>
+            </li>
+
+            <li class="dropdown">
+                <a href="#">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M17.9559465,17 L16.8572173,9.21455489 C16.5341878,6.92561193 14.3163933,5 12,5 C9.68662535,5 7.4656614,6.92648519 7.14273575,9.21456958 L6.04394973,17 L17.9559465,17 Z M5.16236174,8.93507221 C5.62497658,5.65722234 8.69303423,3 12,3 C15.3137085,3 18.3754003,5.66003534 18.8375934,8.93507221 L19.978875,17.0220385 C20.1330409,18.1144365 19.3700367,19 18.2657828,19 L5.73409618,19 C4.63381562,19 3.86648583,18.1169798 4.02101887,17.0220385 L5.16236174,8.93507221 Z"/>
+                    </svg>
+                    Notifications
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Announcements</a></li>
+                    <li><a href="#">Exam Reminders</a></li>
+                    <li><a href="#">Support & Help</a></li>
+                </ul>
+            </li>
+
+            <li>
+                <a href="#">
+                    <svg class="icon" viewBox="0 0 72 72" fill="currentColor">
+                        <g> 
+                            <g> 
+                                <path d="M27.869,68.25c-0.321,0-0.643-0.078-0.937-0.234c-0.671-0.355-1.083-1.061-1.063-1.818l0.195-7.447h-5.015 c-3.822,0-6.551-3.15-6.551-7.021V25.593c0-3.773,2.729-6.843,6.551-6.843h40.137c3.822,0,7.313,3.069,7.313,6.843v26.136 c0,3.871-3.49,7.021-7.313,7.021H41.762l-12.728,9.125C28.688,68.124,28.279,68.25,27.869,68.25z M21.051,22.75 c-1.644,0-2.551,1.249-2.551,2.843v26.136c0,1.639,0.962,3.021,2.551,3.021h7.068c0.54,0,1.057,0.217,1.433,0.604 c0.377,0.387,0.581,0.91,0.566,1.449l-0.144,5.477l9.979-7.154c0.34-0.244,0.747-0.375,1.165-0.375h20.068 c1.589,0,3.313-1.383,3.313-3.021V25.593c0-1.594-1.669-2.843-3.313-2.843H21.051z"></path> 
+                            </g>
+                        </g>
+                    </svg>
+                    Messages
+                </a>
+            </li>
+
+            <li>
+                <a href="#">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                    Profile
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Edit Profile</a></li>
+                    <li><a href="#">Settings</a></li>
+                    <li><a href="#">Logout</a></li>
+                </ul>
+            </li>
+        </ul>
+
+        <!-- Mobile Menu Button -->
+        <div class="hamburger" onclick="toggleMenu()">☰</div>
+    </nav>
+
+</body>
+</html>
