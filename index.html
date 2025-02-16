@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Question Form</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Examiner Details Section -->
+        <div class="examiner-details">
+            <h2>Examination Details</h2>
+            <div class="examiner-field">
+                <label for="examinerName">Examiner's Name:</label>
+                <input type="text" id="examinerName" placeholder="Enter examiner's name">
+            </div>
+            <div class="examiner-field">
+                <label for="examName">Examination Name:</label>
+                <input type="text" id="examName" placeholder="Enter examination name">
+            </div>
+            <div class="examiner-field">
+                <label for="examYear">Examination Year:</label>
+                <input type="number" id="examYear" placeholder="Enter year" min="2000" max="2100">
+            </div>
+        </div>
+
+        <!-- Grade Selection -->
+        <div class="grade-selection">
+            <h2>Select Grade Level</h2>
+            <div class="grade-buttons">
+                <button class="grade-btn" data-grade="7">Grade 7</button>
+                <button class="grade-btn" data-grade="9">Grade 9</button>
+                <button class="grade-btn" data-grade="12">Grade 12</button>
+                <button class="grade-btn" data-grade="alevels">A Levels</button>
+            </div>
+        </div>
+
+        <!-- Subject Selection -->
+        <div class="subject-selection">
+            <h2>Select Subject</h2>
+            <div class="subject-buttons">
+                <!-- Dynamically populated -->
+            </div>
+        </div>
+
+        <!-- Question Form -->
+        <div id="questionForm">
+            <div class="toggle-container">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="modeToggle" checked>
+                    <span class="slider"></span>
+                </label>
+                <span id="modeLabel">Edit Mode</span>
+            </div>
+
+            <div id="editMode">
+                <div class="form-group">
+                    <label for="questionType">Question Type:</label>
+                    <select id="questionType">
+                        <option value="">Select a question type</option>
+                        <option value="essay">Essay Question</option>
+                        <option value="oneWord">One Word Answer</option>
+                        <option value="multipleChoice">Multiple Choice</option>
+                    </select>
+                </div>
+
+                <div class="question-prompt form-group">
+                    <label for="question">Question:</label>
+                    <textarea id="question" placeholder="Enter your question here..."></textarea>
+                </div>
+
+                <div class="answer-prompt form-group">
+                    <label for="answer">Answer:</label>
+                    
+                    <div id="essayAnswer" class="hidden">
+                        <textarea placeholder="Enter model essay answer..."></textarea>
+                    </div>
+
+                    <div id="oneWordAnswer" class="hidden">
+                        <input type="text" placeholder="Enter correct one-word answer...">
+                    </div>
+
+                    <div id="multipleChoiceAnswer" class="hidden">
+                        <div class="multiple-choice-option">
+                            <input type="radio" name="correct-answer" value="0" id="option0">
+                            <input type="text" placeholder="Option 1">
+                        </div>
+                        <div class="multiple-choice-option">
+                            <input type="radio" name="correct-answer" value="1" id="option1">
+                            <input type="text" placeholder="Option 2">
+                        </div>
+                        <div class="multiple-choice-option">
+                            <input type="radio" name="correct-answer" value="2" id="option2">
+                            <input type="text" placeholder="Option 3">
+                        </div>
+                        <div class="multiple-choice-option">
+                            <input type="radio" name="correct-answer" value="3" id="option3">
+                            <input type="text" placeholder="Option 4">
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="submitQuestion()">Add Question</button>
+            </div>
+
+            <div id="viewMode" class="hidden">
+                <h2>Added Questions</h2>
+                <div id="questionsList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
