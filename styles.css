@@ -236,3 +236,62 @@ button {
 button:hover {
     background-color: #1976D2;
 }
+
+.submition-btn {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 15px;
+}
+
+.submit-btn {
+    width: auto;
+}
+
+/* Question Type Selection */
+.question-type-selection {
+    margin-bottom: 20px;
+    display: none;
+}
+
+.type-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.type-btn {
+    padding: 25px;
+    border: 2px solid #4CAF50;
+    background: white;
+    color: #4CAF50;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s;
+}
+
+.type-btn:hover {
+    background: #4CAF50;
+    color: white;
+}
+
+.submit-btn {
+    display: block;  /* Ensure it's always block-level */
+    visibility: visible !important;  /* Force visibility */
+}
+
+.submission-btn {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 15px;
+    position: fixed;  /* Make it stay in view */
+    bottom: 20px;
+    right: 20px;
+}
+
+#trueFalseAnswer {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+}
