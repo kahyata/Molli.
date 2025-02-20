@@ -55,37 +55,61 @@ body {
     font-size: 14px;
 }
 
-/* Grade and Subject Selection Styles */
-.grade-selection, .subject-selection {
-    margin-bottom: 20px;
+/* Grid Styles for Grade and Type Selection */
+.grade-grid, .type-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2x2 grid */
+    gap: 15px; /* Matches type-grid */
+    max-width: 800px; /* Consistent width, adjustable */
+    margin: 15px auto; /* Centered with spacing */
 }
 
-.subject-selection {
-    display: none;
-}
-
-.grade-btn, .subject-btn {
-    padding: 10px 20px;
-    margin: 5px;
-    border: 2px solid #2196F3;
-    background-color: white;
-    color: #2196F3;
-    border-radius: 4px;
+/* Grade Button Styles */
+.grade-btn {
+    padding: 25px; /* Matches type-btn */
+    border: 2px solid #4CAF50; /* Matches type-btn */
+    background: white; /* Matches type-btn */
+    color: #4CAF50; /* Matches type-btn */
+    border-radius: 8px; /* Matches type-btn */
     cursor: pointer;
+    font-size: 16px; /* Matches type-btn */
+    transition: all 0.3s; /* Matches type-btn */
+    text-align: center;
+}
+
+.grade-btn:hover {
+    background: #4CAF50; /* Matches type-btn */
+    color: white; /* Matches type-btn */
+}
+
+.grade-btn.active {
+    background: #2e7d32; /* Slightly darker for active state, customizable */
+    color: white;
+}
+
+/* Type Button Styles (unchanged, for reference) */
+.type-btn {
+    padding: 25px;
+    border: 2px solid #4CAF50;
+    background: white;
+    color: #4CAF50;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
     transition: all 0.3s;
-    font-weight: bold;
 }
 
-.grade-btn:hover, .subject-btn:hover {
-    background-color: #2196F3;
+.type-btn:hover {
+    background: #4CAF50;
     color: white;
 }
 
-.grade-btn.active, .subject-btn.active {
-    background-color: #2196F3;
+.type-btn.active {
+    background: #2e7d32; /* Matches grade-btn active state */
     color: white;
 }
 
+/* Subject Button Styles */
 .subject-btn.add-subject {
     border-color: #4CAF50;
     color: #4CAF50;
@@ -237,7 +261,21 @@ button:hover {
     background-color: #1976D2;
 }
 
-.submition-btn {
+.prev-btn {
+    background-color: #ccc;
+    color: #333;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.prev-btn:hover {
+    background-color: #bbb;
+}
+
+.submission-btn {
     display: flex;
     justify-content: flex-end;
     margin-top: 15px;
@@ -247,49 +285,7 @@ button:hover {
     width: auto;
 }
 
-/* Question Type Selection */
-.question-type-selection {
-    margin-bottom: 20px;
-    display: none;
-}
-
-.type-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-    margin-top: 15px;
-}
-
-.type-btn {
-    padding: 25px;
-    border: 2px solid #4CAF50;
-    background: white;
-    color: #4CAF50;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: all 0.3s;
-}
-
-.type-btn:hover {
-    background: #4CAF50;
-    color: white;
-}
-
-.submit-btn {
-    display: block;  /* Ensure it's always block-level */
-    visibility: visible !important;  /* Force visibility */
-}
-
-.submission-btn {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 15px;
-    position: fixed;  /* Make it stay in view */
-    bottom: 20px;
-    right: 20px;
-}
-
+/* True/False Answer */
 #trueFalseAnswer {
     display: flex;
     gap: 15px;

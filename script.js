@@ -20,8 +20,7 @@ const gradeSubjects = {
 // ===============================
 document.addEventListener('DOMContentLoaded', () => {
     // Hide all sections except examiner details
-    document.getElementById('gradeSubjectFlow').classList.add('hidden');
-    document.getElementById('questionTypeSelection').classList.add('hidden');
+    document.getElementById('gradeSubjectQuestionTypeFlow').classList.add('hidden');
     document.getElementById('questionAnswerFlow').classList.add('hidden');
     document.getElementById('viewMode').classList.add('hidden');
 });
@@ -31,16 +30,13 @@ document.addEventListener('DOMContentLoaded', () => {
 // ===============================
 document.querySelectorAll('.grade-btn').forEach(button => {
     button.addEventListener('click', () => {
-        // Remove active class from all grade buttons
         document.querySelectorAll('.grade-btn').forEach(btn => btn.classList.remove('active'));
-        // Add active class to selected button
         button.classList.add('active');
         
         selectedGrade = button.dataset.grade;
         
-        // Populate subject buttons
         const subjectButtonsContainer = document.querySelector('.subject-buttons');
-        subjectButtonsContainer.innerHTML = ''; // Clear existing buttons
+        subjectButtonsContainer.innerHTML = '';
         
         gradeSubjects[selectedGrade].forEach(subject => {
             const subjectBtn = document.createElement('button');
@@ -49,10 +45,8 @@ document.querySelectorAll('.grade-btn').forEach(button => {
             subjectButtonsContainer.appendChild(subjectBtn);
         });
 
-        // Show subject selection
         document.getElementById('subjectSelection').classList.remove('hidden');
 
-        // Add click handlers to new subject buttons
         document.querySelectorAll('.subject-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.subject-btn').forEach(b => b.classList.remove('active'));
@@ -64,35 +58,11 @@ document.querySelectorAll('.grade-btn').forEach(button => {
 });
 
 // ===============================
-// Handle Step Navigation
-// ===============================
-function nextStep(step) {
-    // Hide all sections
-    document.querySelectorAll('.form-section').forEach(section => {
-        section.classList.add('hidden');
-    });
-
-    // Show the current step
-    if (step === 2) {
-        document.getElementById('gradeSubjectFlow').classList.remove('hidden');
-    } else if (step === 3) {
-        document.getElementById('questionTypeSelection').classList.remove('hidden');
-    } else if (step === 4) {
-        document.getElementById('questionAnswerFlow').classList.remove('hidden');
-        toggleAnswerFields(selectedQuestionType);
-    }
-
-    currentStep = step;
-}
-
-// ===============================
 // Handle Question Type Selection
 // ===============================
 document.querySelectorAll('.type-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-        // Remove active class from all type buttons
         document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
-        // Add active class to selected button
         btn.classList.add('active');
         
         selectedQuestionType = btn.dataset.type;
@@ -101,16 +71,50 @@ document.querySelectorAll('.type-btn').forEach(btn => {
 });
 
 // ===============================
+// Handle Step Navigation
+// ===============================
+function nextStep(step) {
+    document.querySelectorAll('.form-section').forEach(section => {
+        section.classList.add('hidden');
+    });
+
+    if (step === 2) {
+        document.getElementById('gradeSubjectQuestionTypeFlow').classList.remove('hidden');
+    } else if (step === 3) {
+        if (!selectedGrade || !selectedSubject || !selectedQuestionType) {
+            alert('Please select a grade, subject, and question type before proceeding.');
+            return;
+        }
+        document.getElementById('questionAnswerFlow').classList.remove('hidden');
+        toggleAnswerFields(selectedQuestionType);
+    }
+
+    currentStep = step;
+}
+
+function previousStep(step) {
+    document.querySelectorAll('.form-section').forEach(section => {
+        section.classList.add('hidden');
+    });
+
+    if (step === 1) {
+        document.getElementById('examinerDetails').classList.remove('hidden');
+    } else if (step === 2) {
+        document.getElementById('gradeSubjectQuestionTypeFlow').classList.remove('hidden');
+    }
+
+    currentStep = step;
+}
+
+// ===============================
 // Function to Toggle Answer Fields
 // ===============================
 function toggleAnswerFields(type) {
-    // Hide all answer fields first
     document.getElementById('essayAnswer').classList.add('hidden');
     document.getElementById('oneWordAnswer').classList.add('hidden');
     document.getElementById('multipleChoiceAnswer').classList.add('hidden');
     document.getElementById('trueFalseAnswer').classList.add('hidden');
 
-    // Show the selected answer field
     if (type === 'essay') {
         document.getElementById('essayAnswer').classList.remove('hidden');
     } else if (type === 'oneWord') {
@@ -130,13 +134,11 @@ function submitQuestion() {
     const type = document.getElementById('questionType').value;
     let answer;
 
-    // Basic Validation
     if (!questionText || !type) {
         alert('Please fill in all required fields');
         return;
     }
 
-    // Handle Different Answer Types
     if (type === 'essay') {
         const essayAns = document.querySelector('#essayAnswer textarea').value.trim();
         if (!essayAns) {
@@ -176,12 +178,10 @@ function submitQuestion() {
         answer = selected.value === 'true';
     }
 
-    // Get examiner details
     const examinerName = document.getElementById('examinerName').value.trim();
     const examName = document.getElementById('examName').value.trim();
     const examYear = document.getElementById('examYear').value.trim();
 
-    // Create Question Object
     const question = {
         examinerName,
         examName,
@@ -193,23 +193,15 @@ function submitQuestion() {
         answer
     };
 
-    // Add Question to Array
     questions.push(question);
 
-    // Reset Form Fields
     document.getElementById('question').value = '';
     document.getElementById('questionType').value = '';
     document.querySelector('#essayAnswer textarea').value = '';
     document.querySelector('#oneWordAnswer input').value = '';
-    document.querySelectorAll('#multipleChoiceAnswer input[type="text"]').forEach(input => {
-        input.value = '';
-    });
-    document.querySelectorAll('#multipleChoiceAnswer input[type="radio"]').forEach(input => {
-        input.checked = false;
-    });
-    document.querySelectorAll('#trueFalseAnswer input[type="radio"]').forEach(input => {
-        input.checked = false;
-    });
+    document.querySelectorAll('#multipleChoiceAnswer input[type="text"]').forEach(input => input.value = '');
+    document.querySelectorAll('#multipleChoiceAnswer input[type="radio"]').forEach(input => input.checked = false);
+    document.querySelectorAll('#trueFalseAnswer input[type="radio"]').forEach(input => input.checked = false);
 
     alert('Question added successfully!');
     displayQuestions();

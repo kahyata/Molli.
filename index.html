@@ -28,13 +28,13 @@
             </div>
         </div>
 
-        <!-- Grade and Subject Selection Flow -->
-        <div id="gradeSubjectFlow" class="form-section hidden">
-            <h2>Select Grade and Subject</h2>
+        <!-- Combined Grade, Subject, and Question Type Selection -->
+        <div id="gradeSubjectQuestionTypeFlow" class="form-section hidden">
+            <h2>Select Grade, Subject, and Question Type</h2>
             <!-- Grade Selection -->
             <div id="gradeSelection">
                 <h3>Select Grade Level</h3>
-                <div class="grade-buttons">
+                <div class="grade-grid">
                     <button class="grade-btn" data-grade="7">Grade 7</button>
                     <button class="grade-btn" data-grade="9">Grade 9</button>
                     <button class="grade-btn" data-grade="12">Grade 12</button>
@@ -50,22 +50,20 @@
                 </div>
             </div>
 
-            <div class="submission-btn">
-                <button type="button" class="submit-btn" onclick="nextStep(3)">Next</button>
+            <!-- Question Type Selection -->
+            <div id="questionTypeSelection">
+                <h3>Choose the Type of Question</h3>
+                <div class="type-grid">
+                    <button class="type-btn" data-type="multipleChoice">Multiple Choice</button>
+                    <button class="type-btn" data-type="oneWord">One Word Answer</button>
+                    <button class="type-btn" data-type="essay">Essay</button>
+                    <button class="type-btn" data-type="trueFalse">True/False</button>
+                </div>
             </div>
-        </div>
 
-        <!-- Question Type Selection -->
-        <div id="questionTypeSelection" class="form-section hidden">
-            <h2>Choose the Type of Question You Want!</h2>
-            <div class="type-grid">
-                <button class="type-btn" data-type="multipleChoice">Multiple Choice</button>
-                <button class="type-btn" data-type="oneWord">One Word Answer</button>
-                <button class="type-btn" data-type="essay">Essay</button>
-                <button class="type-btn" data-type="trueFalse">True/False</button>
-            </div>
             <div class="submission-btn">
-                <button type="button" class="submit-btn" onclick="nextStep(4)">Next</button>
+                <button type="button" class="prev-btn" onclick="previousStep(1)">Previous</button>
+                <button type="button" class="submit-btn" onclick="nextStep(3)">Next</button>
             </div>
         </div>
 
@@ -137,6 +135,7 @@
             </div>
 
             <div class="submission-btn">
+                <button type="button" class="prev-btn" onclick="previousStep(2)">Previous</button>
                 <button type="button" class="submit-btn" onclick="submitQuestion()">Submit Question</button>
             </div>
         </div>
