@@ -55,39 +55,81 @@ body {
     font-size: 14px;
 }
 
-/* Grid Styles for Grade and Type Selection */
+/* Grid Styles for Grade, Subject, and Type Selection */
 .grade-grid, .type-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr); /* 2x2 grid */
-    gap: 15px; /* Matches type-grid */
-    max-width: 800px; /* Consistent width, adjustable */
+    gap: 15px; /* Consistent spacing */
+    max-width: 600px; /* Matches previous update */
     margin: 15px auto; /* Centered with spacing */
+}
+
+.subject-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Matches grade-grid */
+    gap: 15px; /* Matches grade-grid */
+    max-width: 600px; /* Matches grade-grid */
+    margin: 15px auto; /* Matches grade-grid */
 }
 
 /* Grade Button Styles */
 .grade-btn {
-    padding: 25px; /* Matches type-btn */
-    border: 2px solid #4CAF50; /* Matches type-btn */
-    background: white; /* Matches type-btn */
-    color: #4CAF50; /* Matches type-btn */
-    border-radius: 8px; /* Matches type-btn */
+    padding: 25px;
+    border: 2px solid #4CAF50;
+    background: white;
+    color: #4CAF50;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 16px; /* Matches type-btn */
-    transition: all 0.3s; /* Matches type-btn */
+    font-size: 16px;
+    transition: all 0.3s;
     text-align: center;
 }
 
 .grade-btn:hover {
-    background: #4CAF50; /* Matches type-btn */
-    color: white; /* Matches type-btn */
-}
-
-.grade-btn.active {
-    background: #2e7d32; /* Slightly darker for active state, customizable */
+    background: #4CAF50;
     color: white;
 }
 
-/* Type Button Styles (unchanged, for reference) */
+.grade-btn.active {
+    background: #2e7d32;
+    color: white;
+}
+
+/* Subject Button Styles */
+.subject-btn {
+    padding: 25px; /* Matches grade-btn and type-btn */
+    border: 2px solid #4CAF50; /* Matches grade-btn and type-btn */
+    background: white; /* Matches grade-btn and type-btn */
+    color: #4CAF50; /* Matches grade-btn and type-btn */
+    border-radius: 8px; /* Matches grade-btn and type-btn */
+    cursor: pointer;
+    font-size: 16px; /* Matches grade-btn and type-btn */
+    transition: all 0.3s; /* Matches grade-btn and type-btn */
+    text-align: center;
+}
+
+.subject-btn:hover {
+    background: #4CAF50; /* Matches grade-btn and type-btn */
+    color: white; /* Matches grade-btn and type-btn */
+}
+
+.subject-btn.active {
+    background: #2e7d32; /* Matches grade-btn and type-btn active state */
+    color: white;
+}
+
+/* Remove or override add-subject specific styles if not needed */
+.subject-btn.add-subject {
+    border-color: #4CAF50; /* Already covered by .subject-btn */
+    color: #4CAF50; /* Already covered by .subject-btn */
+}
+
+.subject-btn.add-subject:hover {
+    background-color: #4CAF50; /* Already covered by .subject-btn:hover */
+    color: white; /* Already covered by .subject-btn:hover */
+}
+
+/* Type Button Styles */
 .type-btn {
     padding: 25px;
     border: 2px solid #4CAF50;
@@ -97,6 +139,7 @@ body {
     cursor: pointer;
     font-size: 16px;
     transition: all 0.3s;
+    text-align: center;
 }
 
 .type-btn:hover {
@@ -105,18 +148,7 @@ body {
 }
 
 .type-btn.active {
-    background: #2e7d32; /* Matches grade-btn active state */
-    color: white;
-}
-
-/* Subject Button Styles */
-.subject-btn.add-subject {
-    border-color: #4CAF50;
-    color: #4CAF50;
-}
-
-.subject-btn.add-subject:hover {
-    background-color: #4CAF50;
+    background: #2e7d32;
     color: white;
 }
 
