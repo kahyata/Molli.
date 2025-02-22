@@ -95,16 +95,20 @@
                 </div>
                 <div class="question-source">
                     <div class="Topic_source_field">
-                        <label for="Topic_name">Topic</label>
+                        <label for="topic_name">Topic</label>
                         <input type="text" id="topic_name" placeholder="Enter the topic name here...">
                     </div>
+                    <div class="Topic_source_field">
+                        <label for="subtopic_name">Sub-Topic</label>
+                        <input type="text" id="subtopic_name" placeholder="Enter the subtopic name here...">
+                    </div>
                     <div class="GRADE/LEVEL_field">
-                        <label for="Level_name">Select Grade:</label>
+                        <label for="level_name">Select Grade:</label>
                         <select id="level_name">
-                            <option value="">Grade 7</option>
-                            <option value="">Grade 9</option>
-                            <option value="">Grade 12</option>
-                            <option value="">A-levels</option>
+                            <option value="7">Grade 7</option>
+                            <option value="9">Grade 9</option>
+                            <option value="12">Grade 12</option>
+                            <option value="alevels">A-levels</option>
                         </select>
                     </div>
                 </div>
@@ -170,8 +174,65 @@
         </div>
     </div>
     <div class="edit-section" id="edit-questions">
-        <h2>Edit Questions</h2>
-        <div id="editQuestionsList"></div>
+        <h2>Past Papers</h2>
+        <div class="filter-search-container">
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Quick search...">
+                <button onclick="searchPapers()">Search</button>
+            </div>
+        </div>
+        <div class="table-controls">
+            <div class="table-actions">
+                <button class="columns-btn">Columns</button>
+                <div class="filter-dropdown">
+                    <button id="filterToggle" onclick="toggleFilterDropdown()">Filters</button>
+                    <div id="filterPanel" class="filter-panel" style="display: none;">
+                        <select id="filterGrade">
+                            <option value="">All Grades</option>
+                            <option value="7">Grade 7</option>
+                            <option value="9">Grade 9</option>
+                            <option value="12">Grade 12</option>
+                            <option value="alevels">A Levels</option>
+                        </select>
+                        <select id="filterSubject">
+                            <option value="">All Subjects</option>
+                            <!-- Dynamically populated -->
+                        </select>
+                        <input type="number" id="filterYear" placeholder="Year" min="2000" max="2100">
+                        <input type="text" id="filterExamName" placeholder="Examination Name">
+                        <input type="text" id="filterTopic" placeholder="Topic">
+                        <input type="text" id="filterSubtopic" placeholder="Subtopic">
+                        <button onclick="filterPapers()">Apply Filters</button>
+                    </div>
+                </div>
+                <button class="export-btn">Export</button>
+            </div>
+        </div>
+        <table class="papers-table">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="selectAll"></th>
+                    <th>Exam Name</th>
+                    <th>Year</th>
+                    <th>Grade</th>
+                    <th>Subject</th>
+                    <th>Topic</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="papersTableBody"></tbody>
+        </table>
+        <div class="pagination">
+            <select id="linesPerPage" onchange="fetchAndDisplayPastPapers()">
+                <option value="15">15</option>
+                <option value="30">30</option>
+                <option value="50">50</option>
+            </select>
+            <button onclick="prevPage()">Previous</button>
+            <span id="pageInfo">1 of 1</span>
+            <button onclick="nextPage()">Next</button>
+        </div>
     </div>
 
     <script src="script.js"></script>
