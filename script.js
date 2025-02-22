@@ -6,6 +6,7 @@ let selectedGrade = null;
 let selectedSubject = null;
 let selectedQuestionType = null;
 let questions = [];
+let editingIndex = -1;
 
 // Define subjects for each grade
 const gradeSubjects = {
@@ -19,10 +20,24 @@ const gradeSubjects = {
 // Initialize Form on Page Load
 // ===============================
 document.addEventListener('DOMContentLoaded', () => {
-    // Hide all sections except examiner details
     document.getElementById('gradeSubjectQuestionTypeFlow').classList.add('hidden');
     document.getElementById('questionAnswerFlow').classList.add('hidden');
     document.getElementById('viewMode').classList.add('hidden');
+
+    const switchCheckbox = document.getElementById('switch-button');
+    const addSection = document.getElementById('add-questions');
+    const editSection = document.getElementById('edit-questions');
+
+    switchCheckbox.addEventListener('change', function() {
+        if (this.checked) {
+            addSection.style.display = 'none';
+            editSection.style.display = 'block';
+            displayEditQuestions();
+        } else {
+            addSection.style.display = 'block';
+            editSection.style.display = 'none';
+        }
+    });
 });
 
 // ===============================
@@ -193,7 +208,17 @@ function submitQuestion() {
         answer
     };
 
-    questions.push(question);
+    if (editingIndex === -1) {
+        questions.push(question);
+        alert('Question added successfully!');
+    } else {
+        questions[editingIndex] = question;
+        alert('Question updated successfully!');
+        editingIndex = -1;
+        document.getElementById('switch-button').checked = false;
+        document.getElementById('add-questions').style.display = 'block';
+        document.getElementById('edit-questions').style.display = 'none';
+    }
 
     document.getElementById('question').value = '';
     document.getElementById('questionType').value = '';
@@ -203,12 +228,12 @@ function submitQuestion() {
     document.querySelectorAll('#multipleChoiceAnswer input[type="radio"]').forEach(input => input.checked = false);
     document.querySelectorAll('#trueFalseAnswer input[type="radio"]').forEach(input => input.checked = false);
 
-    alert('Question added successfully!');
     displayQuestions();
+    displayEditQuestions();
 }
 
 // ===============================
-// Function to Display Questions
+// Function to Display Questions (View Mode)
 // ===============================
 function displayQuestions() {
     const questionsList = document.getElementById('questionsList');
@@ -241,4 +266,92 @@ function displayQuestions() {
         
         questionsList.appendChild(questionCard);
     });
+}
+
+// ===============================
+// Function to Display Questions for Editing
+// ===============================
+function displayEditQuestions() {
+    const editQuestionsList = document.getElementById('editQuestionsList');
+    editQuestionsList.innerHTML = '';
+
+    questions.forEach((q, index) => {
+        const questionCard = document.createElement('div');
+        questionCard.className = 'question-card';
+        
+        let answerDisplay = '';
+        if (q.type === 'multipleChoice') {
+            answerDisplay = `
+                Options: ${q.answer.options.join(', ')}
+                <br>Correct Answer: ${q.answer.options[q.answer.correctIndex]}
+            `;
+        } else {
+            answerDisplay = q.answer.toString();
+        }
+
+        questionCard.innerHTML = `
+            <h3>Question ${index + 1}</h3>
+            <p><strong>Examiner:</strong> ${q.examinerName}</p>
+            <p><strong>Exam:</strong> ${q.examName} (${q.examYear})</p>
+            <p><strong>Grade:</strong> ${q.grade}</p>
+            <p><strong>Subject:</strong> ${q.subject}</p>
+            <p><strong>Type:</strong> ${q.type}</p>
+            <p><strong>Question:</strong> ${q.questionText}</p>
+            <p><strong>Answer:</strong> ${answerDisplay}</p>
+            <button onclick="editQuestion(${index})">Edit</button>
+            <button onclick="deleteQuestion(${index})">Delete</button>
+        `;
+        
+        editQuestionsList.appendChild(questionCard);
+    });
+}
+
+// ===============================
+// Function to Edit a Question
+// ===============================
+function editQuestion(index) {
+    const q = questions[index];
+    editingIndex = index;
+
+    document.getElementById('examinerName').value = q.examinerName;
+    document.getElementById('examName').value = q.examName;
+    document.getElementById('examYear').value = q.examYear;
+    selectedGrade = q.grade;
+    selectedSubject = q.subject;
+    selectedQuestionType = q.type;
+    
+    document.getElementById('question').value = q.questionText;
+    document.getElementById('questionType').value = q.type;
+    
+    toggleAnswerFields(q.type);
+    
+    if (q.type === 'essay') {
+        document.querySelector('#essayAnswer textarea').value = q.answer;
+    } else if (q.type === 'oneWord') {
+        document.querySelector('#oneWordAnswer input').value = q.answer;
+    } else if (q.type === 'multipleChoice') {
+        const optionInputs = document.querySelectorAll('#multipleChoiceAnswer input[type="text"]');
+        q.answer.options.forEach((opt, i) => {
+            optionInputs[i].value = opt;
+        });
+        document.querySelector(`#option${q.answer.correctIndex}`).checked = true;
+    } else if (q.type === 'trueFalse') {
+        document.querySelector(`#${q.answer ? 'trueOption' : 'falseOption'}`).checked = true;
+    }
+
+    document.getElementById('switch-button').checked = false;
+    document.getElementById('add-questions').style.display = 'block';
+    document.getElementById('edit-questions').style.display = 'none';
+    nextStep(3);
+}
+
+// ===============================
+// Function to Delete a Question
+// ===============================
+function deleteQuestion(index) {
+    if (confirm('Are you sure you want to delete this question?')) {
+        questions.splice(index, 1);
+        displayEditQuestions();
+        displayQuestions();
+    }
 }
