@@ -9,6 +9,10 @@ body {
     line-height: 1.6;
     padding: 20px;
     background-color: #f0f2f5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
 }
 
 .container {
@@ -97,36 +101,36 @@ body {
 
 /* Subject Button Styles */
 .subject-btn {
-    padding: 25px; /* Matches grade-btn and type-btn */
-    border: 2px solid #4CAF50; /* Matches grade-btn and type-btn */
-    background: white; /* Matches grade-btn and type-btn */
-    color: #4CAF50; /* Matches grade-btn and type-btn */
-    border-radius: 8px; /* Matches grade-btn and type-btn */
+    padding: 25px;
+    border: 2px solid #4CAF50;
+    background: white;
+    color: #4CAF50;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 16px; /* Matches grade-btn and type-btn */
-    transition: all 0.3s; /* Matches grade-btn and type-btn */
+    font-size: 16px;
+    transition: all 0.3s;
     text-align: center;
 }
 
 .subject-btn:hover {
-    background: #4CAF50; /* Matches grade-btn and type-btn */
-    color: white; /* Matches grade-btn and type-btn */
+    background: #4CAF50;
+    color: white;
 }
 
 .subject-btn.active {
-    background: #2e7d32; /* Matches grade-btn and type-btn active state */
+    background: #2e7d32;
     color: white;
 }
 
 /* Remove or override add-subject specific styles if not needed */
 .subject-btn.add-subject {
-    border-color: #4CAF50; /* Already covered by .subject-btn */
-    color: #4CAF50; /* Already covered by .subject-btn */
+    border-color: #4CAF50;
+    color: #4CAF50;
 }
 
 .subject-btn.add-subject:hover {
-    background-color: #4CAF50; /* Already covered by .subject-btn:hover */
-    color: white; /* Already covered by .subject-btn:hover */
+    background-color: #4CAF50;
+    color: white;
 }
 
 /* Type Button Styles */
@@ -153,56 +157,73 @@ body {
 }
 
 /* Toggle Switch Styles */
-.toggle-container {
-    margin-bottom: 20px;
+.switch-button {
+    background: rgba(255, 255, 255, 0.56);
+    border-radius: 30px;
+    overflow: hidden;
+    width: 240px;
+    text-align: center;
+    font-size: 18px;
+    letter-spacing: 1px;
+    color: #2196F3;
+    position: relative;
+    padding-right: 120px;
+    margin: 20px auto;
+}
+
+.switch-button::before {
+    content: "Edit";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 120px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: center;
+    z-index: 3;
+    pointer-events: none;
 }
 
-.toggle-switch {
-    position: relative;
-    display: inline-block;
-    width: 60px;
-    height: 34px;
-}
-
-.toggle-switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.slider {
-    position: absolute;
+.switch-button-checkbox {
     cursor: pointer;
+    position: absolute;
     top: 0;
     left: 0;
-    right: 0;
     bottom: 0;
-    background-color: #ccc;
-    transition: .4s;
-    border-radius: 34px;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    z-index: 2;
 }
 
-.slider:before {
-    position: absolute;
+.switch-button-label {
+    position: relative;
+    padding: 15px 0;
+    display: block;
+    user-select: none;
+    pointer-events: none;
+}
+
+.switch-button-label::before {
     content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    transition: .4s;
-    border-radius: 50%;
+    background: #fff;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    border-radius: 30px;
+    transform: translateX(0);
+    transition: transform 300ms;
 }
 
-input:checked + .slider {
-    background-color: #2196F3;
+.switch-button-checkbox:checked + .switch-button-label::before {
+    transform: translateX(120px);
 }
 
-input:checked + .slider:before {
-    transform: translateX(26px);
+.switch-button-label-span {
+    position: relative;
 }
 
 /* Form Styles */
@@ -212,6 +233,10 @@ input:checked + .slider:before {
 
 .form-group {
     margin-bottom: 15px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
 }
 
 label {
@@ -250,7 +275,56 @@ textarea {
     flex: 1;
 }
 
-/* View Mode Styles */
+/* Question Source Styles */
+.question-source {
+    margin-bottom: 15px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+}
+
+.Topic_source_field,
+.GRADE/LEVEL_field {
+    margin-bottom: 12px;
+}
+
+.Topic_source_field label,
+.GRADE/LEVEL_field label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+    font-weight: bold;
+}
+
+.Topic_source_field input,
+.GRADE/LEVEL_field select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* Answer Prompt Styles */
+.answer-prompt {
+    margin-bottom: 15px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+}
+
+/* Question Prompt Styles */
+.question-prompt {
+    margin-bottom: 15px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+}
+
+/* View Mode and Edit Section Styles */
 .question-card {
     background-color: #fff;
     border: 1px solid #ddd;
@@ -271,6 +345,21 @@ textarea {
 
 .question-card strong {
     color: #555;
+}
+
+.question-card button {
+    margin: 5px;
+    padding: 5px 10px;
+    background: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.question-card button:hover {
+    background: #1976D2;
 }
 
 /* Utility Classes */
@@ -319,7 +408,38 @@ button:hover {
 
 /* True/False Answer */
 #trueFalseAnswer {
-    display: flex;
-    gap: 15px;
     margin-top: 10px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping if needed */
+    gap: 5px; /* Reduced gap for better alignment */
+}
+
+#trueFalseAnswer input[type="radio"] {
+    margin-right: 5px; /* Tighten spacing between radio and label */
+}
+
+#trueFalseAnswer label {
+    margin-right: 15px; /* Space between True and False options */
+    display: inline-block; /* Ensure labels stay inline with radios */
+    margin-bottom: 0; /* Remove extra bottom margin */
+}
+
+/* Section Visibility */
+.add-questions-section {
+    display: block;
+}
+
+.edit-section {
+    display: none;
+}
+
+.add-questions-section,
+.edit-section {
+    margin-top: 60px;
+    width: 100%;
+    max-width: 800px;
 }
