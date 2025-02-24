@@ -247,7 +247,7 @@ label {
 }
 
 select, input, textarea {
-    width: 10%;
+    width: 100%;
     padding: 8px;
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -284,21 +284,18 @@ textarea {
     border-radius: 8px;
 }
 
-.Topic_source_field,
-.GRADE/LEVEL_field {
+.Topic_source_field {
     margin-bottom: 12px;
 }
 
-.Topic_source_field label,
-.GRADE/LEVEL_field label {
+.Topic_source_field label {
     display: block;
     margin-bottom: 5px;
     color: #555;
     font-weight: bold;
 }
 
-.Topic_source_field input,
-.GRADE/LEVEL_field select {
+.Topic_source_field input select {
     width: 100%;
     padding: 8px;
     border: 1px solid #ddd;
@@ -414,18 +411,25 @@ button:hover {
     border: 1px solid #e9ecef;
     border-radius: 8px;
     display: flex;
-    flex-wrap: wrap; /* Allow wrapping if needed */
-    gap: 5px; /* Reduced gap for better alignment */
-}
-
-#trueFalseAnswer input[type="radio"] {
-    margin-right: 5px; /* Tighten spacing between radio and label */
+    align-items: center; /* Vertically center the items */
+    gap: 20px; /* Increase gap for better spacing between True and False pairs */
 }
 
 #trueFalseAnswer label {
-    margin-right: 15px; /* Space between True and False options */
-    display: inline-block; /* Ensure labels stay inline with radios */
-    margin-bottom: 0; /* Remove extra bottom margin */
+    margin: 0; /* Remove default margin to keep it tight */
+    font-weight: bold;
+    color: #333;
+}
+
+#trueFalseAnswer input[type="radio"] {
+    margin-right: 5px; /* Space between radio button and label */
+    margin-bottom: 0px;
+}
+
+/* Ensure each True/False pair stays together */
+#trueFalseAnswer > div {
+    display: flex;
+    align-items: center;
 }
 
 /* Section Visibility */
