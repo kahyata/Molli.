@@ -1,6 +1,4 @@
-// ===============================
 // Global Variables
-// ===============================
 let currentStep = 1;
 let selectedGrade = null;
 let selectedSubject = null;
@@ -19,13 +17,12 @@ const gradeSubjects = {
     'alevels': ['Mathematics', 'Further Mathematics', 'Physics', 'Chemistry', 'Biology']
 };
 
-// ===============================
-// Initialize Form on Page Load
-// ===============================
+// Initialize Form
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('gradeSubjectQuestionTypeFlow').classList.add('hidden');
     document.getElementById('questionAnswerFlow').classList.add('hidden');
     document.getElementById('viewMode').classList.add('hidden');
+    document.getElementById('edit-questions').style.display = 'none';
 
     const switchCheckbox = document.getElementById('switch-button');
     const addSection = document.getElementById('add-questions');
@@ -43,19 +40,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Populate subjects for filtering on load
     populateFilterSubjects();
     document.getElementById('linesPerPage').value = linesPerPage;
+
+    // Attach event listener to the "Next" button in examinerDetails
+    document.querySelector('#examinerDetails .submit-btn').onclick = submitExaminerDetails;
 });
 
-// ===============================
 // Handle Grade Selection
-// ===============================
 document.querySelectorAll('.grade-btn').forEach(button => {
     button.addEventListener('click', () => {
         document.querySelectorAll('.grade-btn').forEach(btn => btn.classList.remove('active'));
         button.classList.add('active');
-        
         selectedGrade = button.dataset.grade;
         
         const subjectButtonsContainer = document.querySelector('.subject-buttons');
@@ -80,183 +76,194 @@ document.querySelectorAll('.grade-btn').forEach(button => {
     });
 });
 
-// ===============================
 // Handle Question Type Selection
-// ===============================
 document.querySelectorAll('.type-btn').forEach(btn => {
     btn.addEventListener('click', () => {
         document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        
         selectedQuestionType = btn.dataset.type;
         document.getElementById('questionType').value = selectedQuestionType;
+        toggleAnswerFields(selectedQuestionType);
     });
 });
 
-// ===============================
-// Handle Step Navigation
-// ===============================
+// Navigation
 function nextStep(step) {
-    document.querySelectorAll('.form-section').forEach(section => {
-        section.classList.add('hidden');
-    });
-
+    document.querySelectorAll('.form-section').forEach(section => section.classList.add('hidden'));
     if (step === 2) {
         document.getElementById('gradeSubjectQuestionTypeFlow').classList.remove('hidden');
     } else if (step === 3) {
         if (!selectedGrade || !selectedSubject || !selectedQuestionType) {
-            alert('Please select a grade, subject, and question type before proceeding.');
+            alert('Please select a grade, subject, and question type.');
             return;
         }
         document.getElementById('questionAnswerFlow').classList.remove('hidden');
-        toggleAnswerFields(selectedQuestionType);
     }
-
     currentStep = step;
 }
 
 function previousStep(step) {
-    document.querySelectorAll('.form-section').forEach(section => {
-        section.classList.add('hidden');
-    });
-
-    if (step === 1) {
-        document.getElementById('examinerDetails').classList.remove('hidden');
-    } else if (step === 2) {
-        document.getElementById('gradeSubjectQuestionTypeFlow').classList.remove('hidden');
-    }
-
+    document.querySelectorAll('.form-section').forEach(section => section.classList.add('hidden'));
+    if (step === 1) document.getElementById('examinerDetails').classList.remove('hidden');
+    else if (step === 2) document.getElementById('gradeSubjectQuestionTypeFlow').classList.remove('hidden');
     currentStep = step;
 }
 
-// ===============================
-// Function to Toggle Answer Fields
-// ===============================
+// Toggle Answer Fields
 function toggleAnswerFields(type) {
-    document.getElementById('essayAnswer').classList.add('hidden');
-    document.getElementById('oneWordAnswer').classList.add('hidden');
-    document.getElementById('multipleChoiceAnswer').classList.add('hidden');
-    document.getElementById('trueFalseAnswer').classList.add('hidden');
-
-    if (type === 'essay') {
-        document.getElementById('essayAnswer').classList.remove('hidden');
-    } else if (type === 'oneWord') {
-        document.getElementById('oneWordAnswer').classList.remove('hidden');
-    } else if (type === 'multipleChoice') {
-        document.getElementById('multipleChoiceAnswer').classList.remove('hidden');
-    } else if (type === 'trueFalse') {
-        document.getElementById('trueFalseAnswer').classList.remove('hidden');
-    }
+    const answerSections = ['essayAnswer', 'oneWordAnswer', 'multipleChoiceAnswer', 'trueFalseAnswer'];
+    answerSections.forEach(section => document.getElementById(section).classList.add('hidden'));
+    if (type) document.getElementById(`${type}Answer`).classList.remove('hidden');
 }
 
-// ===============================
-// Function to Submit a Question
-// ===============================
-async function submitQuestion() {
-    const questionText = document.getElementById('question').value.trim();
-    const type = document.getElementById('questionType').value;
-    let answers = [];
+// Submit Examiner Details
+async function submitExaminerDetails() {
+    const examName = document.getElementById('examName').value.trim();
+    const paperCode = document.getElementById('PaperCode').value.trim();
+    const examinerName = document.getElementById('examinerName').value.trim();
+    const examYear = document.getElementById('examYear').value.trim();
 
-    if (!questionText || !type) {
-        alert('Please fill in all required fields');
+    if (!examName || !paperCode || !examinerName || !examYear) {
+        alert('Please fill in all examination details');
         return;
     }
 
-    if (type === 'essay') {
-        const essayAns = document.querySelector('#essayAnswer textarea').value.trim();
-        if (!essayAns) return alert('Please provide an essay answer');
-        answers.push({ text: essayAns, isCorrect: true });
-    } else if (type === 'oneWord') {
-        const oneWordAns = document.querySelector('#oneWordAnswer input').value.trim();
-        if (!oneWordAns) return alert('Please provide a one-word answer');
-        answers.push({ text: oneWordAns, isCorrect: true });
-    } else if (type === 'multipleChoice') {
-        const optionInputs = document.querySelectorAll('#multipleChoiceAnswer input[type="text"]');
-        const options = Array.from(optionInputs).map(input => input.value.trim());
-        if (options.some(opt => !opt)) return alert('Please fill all multiple-choice options');
-        const selectedRadio = document.querySelector('#multipleChoiceAnswer input[type="radio"]:checked');
-        if (!selectedRadio) return alert('Please select the correct answer');
-        answers = options.map((opt, i) => ({ text: opt, isCorrect: i === parseInt(selectedRadio.value) }));
-    } else if (type === 'trueFalse') {
-        const selected = document.querySelector('input[name="trueFalse"]:checked');
-        if (!selected) return alert('Please select True or False');
-        answers.push({ text: 'True', isCorrect: selected.value === 'true' });
-        answers.push({ text: 'False', isCorrect: selected.value === 'false' });
-    }
-
-    const examinerName = document.getElementById('examinerName').value.trim();
-    const examName = document.getElementById('examName').value.trim();
-    const examYear = document.getElementById('examYear').value.trim();
-    const topic = document.getElementById('topic_name').value.trim();
-    const subtopic = document.getElementById('subtopic_name').value.trim();
-    const grade = document.getElementById('level_name').value.trim();
-    const marks = 2; // Example, adjust as needed
-
-    const questionData = {
-        examId: 1, // Replace with dynamic exam ID
-        sectionId: 1, // Replace with dynamic section ID
-        questionText,
-        marks,
-        type,
-        answers,
-        examinerName,
+    const examData = {
         examName,
-        examYear,
-        topic,
-        subtopic,
-        grade
+        paperCode,
+        examinerName,
+        examYear
     };
 
     try {
-        const token = localStorage.getItem('token');
-        const response = editingIndex === -1 ?
-            await fetch(`${API_BASE_URL}/questions`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                body: JSON.stringify(questionData)
-            }) :
-            await fetch(`${API_BASE_URL}/questions/${questions[editingIndex].question_id}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                body: JSON.stringify(questionData)
-            });
+        const response = await fetch(`${API_BASE_URL}/exams`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(examData)
+        });
 
-        if (!response.ok) throw new Error('Failed to submit question');
-        const result = await response.json();
-
-        if (editingIndex === -1) {
-            questions.push({ ...questionData, question_id: result.questionId });
-            alert('Question added successfully!');
-        } else {
-            questions[editingIndex] = { ...questionData, question_id: questions[editingIndex].question_id };
-            alert('Question updated successfully!');
-            editingIndex = -1;
-            document.getElementById('switch-button').checked = false;
-            document.getElementById('add-questions').style.display = 'block';
-            document.getElementById('edit-questions').style.display = 'none';
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to save examination details');
         }
 
-        document.getElementById('question').value = '';
-        document.getElementById('questionType').value = '';
-        document.getElementById('topic_name').value = '';
-        document.getElementById('subtopic_name').value = '';
-        document.getElementById('level_name').value = '7'; // Reset to default Grade 7
-        document.querySelector('#essayAnswer textarea').value = '';
-        document.querySelector('#oneWordAnswer input').value = '';
-        document.querySelectorAll('#multipleChoiceAnswer input[type="text"]').forEach(input => input.value = '');
-        document.querySelectorAll('#multipleChoiceAnswer input[type="radio"]').forEach(input => input.checked = false);
-        document.querySelectorAll('#trueFalseAnswer input[type="radio"]').forEach(input => input.checked = false);
-
-        displayQuestions();
-        fetchAndDisplayPastPapers(); // Refresh past papers after submission
+        const result = await response.json();
+        alert('Examination details saved successfully!');
+        document.getElementById('examName').value = '';
+        document.getElementById('PaperCode').value = 'Paper 1'; // Reset to first option
+        document.getElementById('examinerName').value = '';
+        document.getElementById('examYear').value = '';
+        nextStep(2); // Move to grade/subject selection
     } catch (error) {
         alert(`Error: ${error.message}`);
     }
 }
 
-// ===============================
-// Function to Display Questions (View Mode)
-// ===============================
+// Submit Question (Basic Implementation)
+async function submitQuestion() {
+    const questionText = document.getElementById('question').value.trim();
+    const topic = document.getElementById('topic_name').value.trim();
+    const subtopic = document.getElementById('subtopic_name').value.trim();
+    const questionType = document.getElementById('questionType').value;
+
+    if (!questionText || !questionType) {
+        alert('Please enter a question and select a question type.');
+        return;
+    }
+
+    let answers = [];
+    if (questionType === 'essay') {
+        const essayAnswer = document.getElementById('essayInput').value.trim();
+        if (!essayAnswer) {
+            alert('Please provide a model essay answer.');
+            return;
+        }
+        answers.push({ text: essayAnswer, isCorrect: true });
+    } else if (questionType === 'oneWord') {
+        const oneWordAnswer = document.getElementById('oneWordInput').value.trim();
+        if (!oneWordAnswer) {
+            alert('Please provide a one-word answer.');
+            return;
+        }
+        answers.push({ text: oneWordAnswer, isCorrect: true });
+    } else if (questionType === 'multipleChoice') {
+        const options = Array.from(document.querySelectorAll('#multipleChoiceAnswer input[type="text"]'))
+            .map((input, i) => ({
+                text: input.value.trim(),
+                isCorrect: document.getElementById(`option${i}`).checked
+            }));
+        if (options.every(opt => !opt.text)) {
+            alert('Please provide at least one option.');
+            return;
+        }
+        if (!options.some(opt => opt.isCorrect)) {
+            alert('Please select a correct answer.');
+            return;
+        }
+        answers = options.filter(opt => opt.text); // Only include non-empty options
+    } else if (questionType === 'trueFalse') {
+        const trueFalseValue = document.querySelector('#trueFalseAnswer input[name="trueFalse"]:checked');
+        if (!trueFalseValue) {
+            alert('Please select True or False.');
+            return;
+        }
+        answers.push({ text: trueFalseValue.value, isCorrect: true });
+    }
+
+    const questionData = {
+        examinerName: document.getElementById('examinerName').value.trim(),
+        examName: document.getElementById('examName').value.trim(),
+        examYear: document.getElementById('examYear').value.trim(),
+        grade: selectedGrade,
+        subject: selectedSubject,
+        topic,
+        subtopic,
+        type: questionType,
+        questionText,
+        answers
+    };
+
+    // For now, store locally (mock implementation)
+    questions.push({ ...questionData, question_id: questions.length + 1 });
+    resetForm();
+    displayQuestions();
+    alert('Question added successfully!');
+
+    // Uncomment for real API integration (requires server endpoint)
+    /*
+    try {
+        const response = await fetch(`${API_BASE_URL}/questions`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(questionData)
+        });
+        if (!response.ok) throw new Error('Failed to save question');
+        const result = await response.json();
+        questions.push({ ...questionData, question_id: result.questionId });
+        resetForm();
+        displayQuestions();
+        alert('Question saved successfully!');
+    } catch (error) {
+        alert(`Error: ${error.message}`);
+    }
+    */
+}
+
+// Reset Form
+function resetForm() {
+    document.getElementById('question').value = '';
+    document.getElementById('questionType').value = '';
+    document.getElementById('topic_name').value = '';
+    document.getElementById('subtopic_name').value = '';
+    document.getElementById('essayInput').value = '';
+    document.getElementById('oneWordInput').value = '';
+    document.querySelectorAll('#multipleChoiceAnswer input[type="text"]').forEach(input => input.value = '');
+    document.querySelectorAll('#multipleChoiceAnswer input[type="radio"]').forEach(input => input.checked = false);
+    document.querySelectorAll('#trueFalseAnswer input[type="radio"]').forEach(input => input.checked = false);
+    toggleAnswerFields('');
+}
+
+// Display Questions
 function displayQuestions() {
     const questionsList = document.getElementById('questionsList');
     questionsList.innerHTML = '';
@@ -264,17 +271,9 @@ function displayQuestions() {
     questions.forEach((q, index) => {
         const questionCard = document.createElement('div');
         questionCard.className = 'question-card';
-        
-        let answerDisplay = '';
-        if (q.type === 'multipleChoice') {
-            const correctIndex = q.answers.findIndex(a => a.isCorrect);
-            answerDisplay = `
-                Options: ${q.answers.map(a => a.text).join(', ')}
-                <br>Correct Answer: ${q.answers[correctIndex]?.text || 'N/A'}
-            `;
-        } else {
-            answerDisplay = q.answers[0]?.text || 'N/A';
-        }
+        let answerDisplay = q.type === 'multipleChoice' ?
+            `Options: ${q.answers.map(a => a.text).join(', ')}<br>Correct: ${q.answers.find(a => a.isCorrect)?.text || 'N/A'}` :
+            q.answers[0]?.text || 'N/A';
 
         questionCard.innerHTML = `
             <h3>Question ${index + 1}</h3>
@@ -288,14 +287,11 @@ function displayQuestions() {
             <p><strong>Question:</strong> ${q.questionText}</p>
             <p><strong>Answer:</strong> ${answerDisplay}</p>
         `;
-        
         questionsList.appendChild(questionCard);
     });
 }
 
-// ===============================
 // Populate Filter Subjects
-// ===============================
 function populateFilterSubjects() {
     const subjectSelect = document.getElementById('filterSubject');
     subjectSelect.innerHTML = '<option value="">All Subjects</option>';
@@ -308,21 +304,12 @@ function populateFilterSubjects() {
     });
 }
 
-// ===============================
-// Fetch and Display Past Papers (Table Version)
+// Fetch and Display Past Papers
 async function fetchAndDisplayPastPapers(filters = {}) {
     try {
-        const token = localStorage.getItem('token');
         filters.page = currentPage;
         filters.limit = linesPerPage;
-        const queryParams = new URLSearchParams(filters).toString();
-        const response = await fetch(`${API_BASE_URL}/questions?${queryParams}`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-        if (!response.ok) throw new Error('Failed to fetch papers');
-        const data = await response.json();
-        questions = data.data || data; // Adjust based on backend response format
-        totalPapers = data.total || questions.length; // Adjust based on backend total count
+        totalPapers = questions.length; // Mock data
         displayPastPapersTable();
         updatePagination();
     } catch (error) {
@@ -331,28 +318,25 @@ async function fetchAndDisplayPastPapers(filters = {}) {
     }
 }
 
-// ===============================
-// Display Past Papers in Table
-// ===============================
+// Display Past Papers Table
 function displayPastPapersTable() {
     const tableBody = document.getElementById('papersTableBody');
     tableBody.innerHTML = '';
 
     const start = (currentPage - 1) * linesPerPage;
-    const end = start + linesPerPage;
+    const end = Math.min(start + linesPerPage, questions.length);
     const paginatedQuestions = questions.slice(start, end);
 
     paginatedQuestions.forEach(q => {
         const row = document.createElement('tr');
-        const exam = questions.find(p => p.exam_id === q.exam_id && p.paper_id === q.paper_id);
         row.innerHTML = `
             <td><input type="checkbox" name="selectPaper" value="${q.question_id}"></td>
-            <td>${exam?.exam_code || 'Unknown Exam'}</td>
-            <td>${exam?.year || 'N/A'}</td>
-            <td>${exam?.grade_name || 'N/A'}</td>
-            <td>${exam?.subject_name || 'N/A'}</td>
-            <td>${q.topic || 'N/A'} / ${q.subtopic || 'N/A'}</td> <!-- Display Topic/Subtopic -->
-            <td class="status-${exam?.term === 'Term 1' ? 'open' : 'closed'}">${exam?.term || 'N/A'}</td>
+            <td>${q.examName || 'Unknown Exam'}</td>
+            <td>${q.examYear || 'N/A'}</td>
+            <td>${q.grade || 'N/A'}</td>
+            <td>${q.subject || 'N/A'}</td>
+            <td>${q.topic || 'N/A'} / ${q.subtopic || 'N/A'}</td>
+            <td class="status-open">Open</td>
             <td class="actions">
                 <button onclick="editQuestion(${q.question_id})">Edit</button>
                 <button onclick="deleteQuestion(${q.question_id})">Delete</button>
@@ -361,17 +345,14 @@ function displayPastPapersTable() {
         tableBody.appendChild(row);
     });
 
-    // Handle select all checkbox
     document.getElementById('selectAll').addEventListener('change', (e) => {
         document.querySelectorAll('input[name="selectPaper"]').forEach(cb => cb.checked = e.target.checked);
     });
 }
 
-// ===============================
-// Pagination Functions
-// ===============================
+// Pagination
 function updatePagination() {
-    const totalPages = Math.ceil(totalPapers / linesPerPage);
+    const totalPages = Math.ceil(totalPapers / linesPerPage) || 1;
     document.getElementById('pageInfo').textContent = `${currentPage} of ${totalPages}`;
 }
 
@@ -383,28 +364,28 @@ function prevPage() {
 }
 
 function nextPage() {
-    const totalPages = Math.ceil(totalPapers / linesPerPage);
+    const totalPages = Math.ceil(totalPapers / linesPerPage) || 1;
     if (currentPage < totalPages) {
         currentPage++;
         fetchAndDisplayPastPapers();
     }
 }
 
-// ===============================
+function updateLinesPerPage() {
+    linesPerPage = parseInt(document.getElementById('linesPerPage').value);
+    currentPage = 1;
+    fetchAndDisplayPastPapers();
+}
+
 // Search Papers
-// ===============================
 function searchPapers() {
     const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
-    const filters = {
-        search: searchTerm
-    };
-    currentPage = 1; // Reset to first page on search
+    const filters = { search: searchTerm };
+    currentPage = 1;
     fetchAndDisplayPastPapers(filters);
 }
 
-// ===============================
 // Filter Papers
-// ===============================
 function filterPapers() {
     const filters = {
         grade: document.getElementById('filterGrade').value,
@@ -415,77 +396,26 @@ function filterPapers() {
         subtopic: document.getElementById('filterSubtopic').value.trim()
     };
     Object.keys(filters).forEach(key => filters[key] === '' && delete filters[key]);
-    currentPage = 1; // Reset to first page on filter
+    currentPage = 1;
     fetchAndDisplayPastPapers(filters);
 }
 
-// ===============================
 // Toggle Filter Dropdown
-// ===============================
 function toggleFilterDropdown() {
     const filterPanel = document.getElementById('filterPanel');
     filterPanel.style.display = filterPanel.style.display === 'none' ? 'block' : 'none';
-    document.getElementById('filterToggle').textContent = filterPanel.style.display === 'none' ? 'Filters' : 'Filters';
 }
 
-// ===============================
-// Edit Question
-// ===============================
+// Edit Question (Stub)
 function editQuestion(questionId) {
-    const question = questions.find(q => q.question_id === questionId);
-    editingIndex = questions.indexOf(question);
-
-    document.getElementById('examinerName').value = question.examinerName || '';
-    document.getElementById('examName').value = question.exam_code || '';
-    document.getElementById('examYear').value = question.year || '';
-    selectedGrade = question.grade_name;
-    selectedSubject = question.subject_name;
-    selectedQuestionType = question.question_type.replace('_', ''); // Adjust for frontend
-    
-    document.getElementById('question').value = question.question_text;
-    document.getElementById('questionType').value = selectedQuestionType;
-    document.getElementById('topic_name').value = question.topic || '';
-    document.getElementById('subtopic_name').value = question.subtopic || '';
-    document.getElementById('level_name').value = selectedGrade || '7';
-
-    toggleAnswerFields(selectedQuestionType);
-    
-    if (selectedQuestionType === 'longanswer') {
-        document.querySelector('#essayAnswer textarea').value = question.answers[0]?.answer_text || '';
-    } else if (selectedQuestionType === 'shortanswer') {
-        document.querySelector('#oneWordAnswer input').value = question.answers[0]?.answer_text || '';
-    } else if (selectedQuestionType === 'multiplechoice') {
-        const optionInputs = document.querySelectorAll('#multipleChoiceAnswer input[type="text"]');
-        question.answers.forEach((ans, i) => {
-            optionInputs[i].value = ans.answer_text;
-            if (ans.is_correct) document.querySelector(`#option${i}`).checked = true;
-        });
-    } else if (selectedQuestionType === 'truefalse') {
-        document.querySelector(`#${question.answers.find(a => a.is_correct)?.answer_text.toLowerCase() === 'true' ? 'trueOption' : 'falseOption'}`).checked = true;
-    }
-
-    document.getElementById('switch-button').checked = false;
-    document.getElementById('add-questions').style.display = 'block';
-    document.getElementById('edit-questions').style.display = 'none';
-    nextStep(3);
+    alert(`Edit functionality for question ${questionId} not fully implemented yet.`);
 }
 
-// ===============================
 // Delete Question
-// ===============================
 async function deleteQuestion(questionId) {
     if (confirm('Are you sure you want to delete this question?')) {
-        try {
-            const token = localStorage.getItem('token');
-            const response = await fetch(`${API_BASE_URL}/questions/${questionId}`, {
-                method: 'DELETE',
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            if (!response.ok) throw new Error('Failed to delete question');
-            questions = questions.filter(q => q.question_id !== questionId);
-            fetchAndDisplayPastPapers(); // Refresh table after deletion
-        } catch (error) {
-            alert(`Error: ${error.message}`);
-        }
+        questions = questions.filter(q => q.question_id !== questionId);
+        fetchAndDisplayPastPapers();
+        alert('Question deleted locally.');
     }
 }
