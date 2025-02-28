@@ -330,6 +330,7 @@ button:hover {
 
 .search-bar button {
     background-color: #1a73e8;
+    height: 38px;
 }
 
 .search-bar button:hover {
