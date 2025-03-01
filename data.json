@@ -1,0 +1,75 @@
+{
+    "examinations": [
+      {
+        "examName": "Mathematics ECZ",
+        "paperCode": "Paper 1",
+        "examinerName": "John Doe",
+        "examYear": 2024,
+        "subject": "Mathematics",
+        "grade": "Grade 10",
+        "questions": [
+          {
+            "questionText": "Solve for x: 2x + 5 = 13",
+            "topic": "Algebra",
+            "subtopic": "Linear Equations",
+            "type": "multiple_choice",
+            "answers": [
+              {
+                "text": "4",
+                "isCorrect": true,
+                "explanation": "Subtract 5 from both sides: 2x = 8, then divide by 2: x = 4"
+              },
+              {
+                "text": "3",
+                "isCorrect": false
+              },
+              {
+                "text": "5",
+                "isCorrect": false
+              },
+              {
+                "text": "6",
+                "isCorrect": false
+              }
+            ]
+          },
+          {
+            "questionText": "What is the value of y in: y² = 16?",
+            "topic": "Algebra",
+            "subtopic": "Quadratic Equations",
+            "type": "multiple_choice",
+            "answers": [
+              {
+                "text": "4 or -4",
+                "isCorrect": true,
+                "explanation": "Square root of 16 can be positive or negative 4"
+              },
+              {
+                "text": "4",
+                "isCorrect": false
+              },
+              {
+                "text": "-4",
+                "isCorrect": false
+              },
+              {
+                "text": "8",
+                "isCorrect": false
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "filters": {
+      "grades": ["Grade 7", "Grade 9", "Grade 10", "Grade 12", "A Levels"],
+      "subjects": ["Mathematics", "Physics", "Chemistry", "Biology", "English"],
+      "years": [2020, 2021, 2022, 2023, 2024],
+      "topics": ["Algebra", "Geometry", "Mechanics", "Optics", "Thermodynamics"],
+      "subtopics": ["Linear Equations", "Quadratic Equations", "Newton's Laws", "Light", "Heat Transfer"]
+    },
+    "searchOptions": {
+      "examNames": ["Mathematics ECZ", "Physics ECZ", "Chemistry ECZ"],
+      "keywords": ["Algebra", "Force", "Light", "Quadratic Equations", "Newton's Laws"]
+    }
+  }
