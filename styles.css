@@ -1,149 +1,110 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-
 * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-    font-family: "Poppins", serif;
 }
 
-.navbar {
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: white;
-    padding: 15px 20px;
-    color: #333;
-    border-bottom: 1px solid #ddd;
-    position: relative;
+    min-height: 100vh;
 }
 
-.logo {
-    position: absolute;
-    left: 20px;
-    font-size: 16px;
-    font-weight: bold;
-    color: #333;
-}
-
-.nav-links {
-    list-style: none;
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-}
-
-.nav-links li {
-    position: relative;
-    text-align: center;
-}
-
-.nav-links a {
-    text-decoration: none;
-    color: #333;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-    font-size: 12px;
-    transition: color 0.3s ease-in-out;
-}
-
-.icon {
-    width: 24px;
-    height: 24px;
-    fill: currentColor;
-    transition: fill 0.3s ease-in-out;
-}
-
-.nav-links a:hover .icon {
-    fill: #555;
-}
-
-.nav-links a:hover {
-    color: #555;
-}
-
-.dropdown-menu {
-    display: none;
-    position: absolute;
-    background: white;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    min-width: 180px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    overflow: hidden;
-    z-index: 1000;
-}
-
-.dropdown-menu li {
-    list-style: none;
-}
-
-.dropdown-menu a {
-    color: #333;
-    padding: 10px;
-    display: block;
+.dashboard-container {
     width: 100%;
-    transition: background 0.3s ease-in-out;
+    max-width: 800px;
 }
 
-.dropdown-menu a:hover {
-    background: #f1f1f1;
+.dashboard-content {
+    background-color: white;
+    border-radius: 0px; /* Radius kept on outer container */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
 }
 
-.dropdown:hover .dropdown-menu {
-    display: block;
+.dashboard-header {
+    background-color: #000000;
+    color: white;
+    padding: 20px;
+    text-align: left;
 }
 
-.navbar .nav-links li:last-child {
-    position: absolute;
-    right: 20px;
+.dashboard-header h1 {
+    font-size: 28px;
+    font-weight: bold;
 }
 
-/* Mobile Styles */
-.hamburger {
-    display: none;
-    font-size: 24px;
+.dashboard-body {
+    padding: 20px;
+    border: 2px solid black;
+}
+
+.dashboard-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 columns */
+    grid-template-rows: repeat(2, 1fr); /* 2 rows */
+    gap: 20px;
+}
+
+.dashboard-btn {
+    background-color: #fff;
+    border: 2px solid #2196F3;
+    border-radius: 0px;
+    padding: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #2196F3;
+    text-align: center;
     cursor: pointer;
+    transition: all 0.3s ease;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    .nav-links {
-        display: none;
-        flex-direction: column;
-        background: white;
-        position: absolute;
-        top: 60px;
-        right: 0;
-        width: 200px;
-        padding: 10px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        border-radius: 5px;
-    }
+.dashboard-btn:hover {
+    background-color: #2196F3;
+    color: white;
+    transform: scale(1.05);
+}
 
-    .nav-links.active {
-        display: flex;
-    }
+/* Specific styling for each option */
+.edit-view {
+    border: 2px solid black;
+    color: #000000;
+}
+.edit-view:hover {
+    background-color: #000000;
+    color: white;
+}
 
-    .hamburger {
-        display: block;
-    }
+.prepare {
+    border: 2px solid black;
+    color: #000000;
+}
+.prepare:hover {
+    background-color: #000000;
+    color: white;
+}
 
-    .dropdown-menu {
-        position: static;
-        display: none;
-        background: transparent;
-        box-shadow: none;
-        left: 0;
-        transform: none;
-    }
+.scores {
+    border: 2px solid black;
+    color: #000000;
+}
+.scores:hover {
+    background-color: #000000;
+    color: white;
+}
 
-    .dropdown:hover .dropdown-menu {
-        display: block;
-    }
+.reports {
+    border: 2px solid black;
+    color: #000000;
+}
+.reports:hover {
+    background-color: #000000;
+    color: white;
 }
