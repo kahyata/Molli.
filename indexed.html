@@ -3,225 +3,285 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teacher Question Form.</title>
+    <title>Three Column Layout</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="switch-button">
-        <input class="switch-button-checkbox" type="checkbox" id="switch-button">
-        <label class="switch-button-label" for="switch-button">
-            <span class="switch-button-label-span">CREATE</span>
-        </label>
-    </div>
-
-    <div class="add-questions-section" id="add-questions">
-        <div class="container">
-            <div id="examinerDetails" class="form-section">
-                <h2>EXAMINATION DETAILS.</h2>
-                <div class="examiner-field examiner-field-matrix">
-                    <div class="field-item">
-                        <label for="examName"></label>
-                        <input type="text" id="examName" placeholder="ENTER THE EXAM NAME">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <nav class="nav-bar-menu">
+            <div class="logo">Molli</div>
+            <ul>
+                <li class="dropdown">
+                    <a href="#" class="dropbtn" id="getStartedLink">Get Started</a>
+                    <div class="dropdown-content">
+                        <a href="#">Start A Quiz</a>
+                        <a href="#">Add Questions</a>
+                        <a href="#">View Questions</a>
+                        <a href="#">Prepare Homework</a>
+                        <a href="#">Create Online Lessons</a>
                     </div>
-                    <div class="field-item">
-                        <label for="PaperCode"></label>
-                        <select id="PaperCode">
-                            <option value="Paper 1">PAPER 1</option>
-                            <option value="Paper 2">PAPER 2</option>
-                            <option value="Paper 3">PAPER 3</option>
-                        </select>
+                </li>
+                <li class="notifications">
+                    <a href="#" id="notificationsLink" onclick="showContent('notifications')">Notifications</a>
+                </li>
+                <li><a href="#" onclick="showContent('messages')">Messages</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropbtn">Settings</a>
+                    <div class="dropdown-content">
+                        <a href="#">Account</a>
+                        <a href="#">Monetization</a>
+                        <a href="#">Help Center</a>
                     </div>
+                </li>
+                <li><a href="#" onclick="showContent('dataAnalytics')">Data Analytics</a></li>
+            </ul>
+        </nav>
+        <div class="profile-link">
+            <a href="#" id="profileLink" onclick="toggleProfileSection()">
+                <svg viewBox="0 0 20 20" class="menu-icon" xmlns="http://www.w3.org/2000/svg" fill="#ffffff">
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                    <g id="SVGRepo_iconCarrier">
+                        <title>profile [#1335]</title>
+                        <desc>Created with Sketch.</desc>
+                        <defs></defs>
+                        <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <g id="Dribbble-Light-Preview" transform="translate(-420.000000, -2159.000000)" fill="#ffffff">
+                                <g id="icons" transform="translate(56.000000, 160.000000)">
+                                    <path d="M374,2009 C371.794,2009 370,2007.206 370,2005 C370,2002.794 371.794,2001 374,2001 C376.206,2001 378,2002.794 378,2005 C378,2007.206 376.206,2009 374,2009 M377.758,2009.673 C379.124,2008.574 380,2006.89 380,2005 C380,2001.686 377.314,1999 374,1999 C370.686,1999 368,2001.686 368,2005 C368,2006.89 368.876,2008.574 370.242,2009.673 C366.583,2011.048 364,2014.445 364,2019 L366,2019 C366,2014 369.589,2011 374,2011 C378.411,2011 382,2014 382,2019 L384,2019 C384,2014.445 381.417,2011.048 377.758,2009.673" id="profile-[#1335]"></path>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </svg>
+                <div class="profile-info">
+                    <span class="name">John Doe</span>
+                    <span class="username">@JohnDoe10101</span>
                 </div>
-                <div class="examiner-field">
-                    <label for="examinerName"></label>
-                    <input type="text" id="examinerName" placeholder="ENTER THE SOURCE OF THE EXAM">
-                </div>
-                <div class="examiner-field">
-                    <label for="examYear"></label>
-                    <input type="number" id="examYear" placeholder="ENTER THE YEAR OF THE EXAM" min="2000" max="2100">
-                </div>
-                <div class="submission-btn">
-                    <button type="button" class="submit-btn" onclick="submitExaminerDetails()">Next</button>
-                </div>
-            </div>
-
-            <div id="gradeSubjectQuestionTypeFlow" class="form-section hidden">
-                <h2>Select Grade, Subject, and Question Type</h2>
-                <div id="gradeSelection">
-                    <h3>Select Grade Level</h3>
-                    <div class="grade-grid">
-                        <button class="grade-btn" data-grade="7">Grade 7</button>
-                        <button class="grade-btn" data-grade="9">Grade 9</button>
-                        <button class="grade-btn" data-grade="12">Grade 12</button>
-                        <button class="grade-btn" data-grade="alevels">A Levels</button>
-                    </div>
-                </div>
-
-                <div id="subjectSelection" class="hidden">
-                    <h3>Select Subject</h3>
-                    <div class="subject-buttons"></div>
-                </div>
-
-                <div id="questionTypeSelection">
-                    <h3>Choose the Type of Question</h3>
-                    <div class="type-grid">
-                        <button class="type-btn" data-type="multipleChoice">Multiple Choice</button>
-                        <button class="type-btn" data-type="oneWord">One Word Answer</button>
-                        <button class="type-btn" data-type="essay">Essay</button>
-                        <button class="type-btn" data-type="trueFalse">True/False</button>
-                    </div>
-                </div>
-
-                <div class="submission-btn">
-                    <button type="button" class="prev-btn" onclick="previousStep(1)">Previous</button>
-                    <button type="button" class="submit-btn" onclick="nextStep(3)">Next</button>
-                </div>
-            </div>
-
-            <div id="questionAnswerFlow" class="form-section hidden">
-                <h2>Add Your Question and Answer</h2>
-                <div class="form-group">
-                    <label for="questionType">Question Type:</label>
-                    <select id="questionType" onchange="toggleAnswerFields(this.value)">
-                        <option value="">Select a question type</option>
-                        <option value="essay">Essay Question</option>
-                        <option value="oneWord">One Word Answer</option>
-                        <option value="multipleChoice">Multiple Choice</option>
-                        <option value="trueFalse">True/False</option>
-                    </select>
-                </div>
-
-                <div class="question-prompt form-group">
-                    <label for="question"></label>
-                    <textarea id="question" placeholder="ENTER YOUR QUESTION HERE"></textarea>
-                </div>
-                <div class="question-source">
-                    <div class="Topic_source_field">
-                        <label for="topic_name"></label>
-                        <input type="text" id="topic_name" placeholder="ENTER THE TOPIC NAME HERE">
-                    </div>
-                    <div class="Topic_source_field">
-                        <label for="subtopic_name"></label>
-                        <input type="text" id="subtopic_name" placeholder="ENTER THE SUBTOPIC NAME HERE">
-                    </div>
-                </div>
-                <div class="answer-prompt form-group">
-                    <label>Answer:</label>
-                    <div id="essayAnswer" class="hidden">
-                        <label for="essayInput"></label>
-                        <textarea id="essayInput" placeholder="ENTER ESSAY ANSWER HERE"></textarea>
-                    </div>
-                    <div id="oneWordAnswer" class="hidden">
-                        <label for="oneWordInput"></label>
-                        <input type="text" id="oneWordInput" placeholder="ENTER ONE-WORD ANSWER HERE">
-                    </div>
-                    <div id="multipleChoiceAnswer" class="hidden">
-                        <div class="multiple-choice-option">
-                            <input type="radio" id="option0" name="correct-answer" value="0">
-                            <label for="optionText0"></label>
-                            <input type="text" id="optionText0" placeholder="ENTER OPTION 1 HERE">
-                        </div>
-                        <div class="multiple-choice-option">
-                            <input type="radio" id="option1" name="correct-answer" value="1">
-                            <label for="optionText1"></label>
-                            <input type="text" id="optionText1" placeholder="ENTER OPTION 2 HERE">
-                        </div>
-                        <div class="multiple-choice-option">
-                            <input type="radio" id="option2" name="correct-answer" value="2">
-                            <label for="optionText2"></label>
-                            <input type="text" id="optionText2" placeholder="ENTER OPTION 3 HERE">
-                        </div>
-                        <div class="multiple-choice-option">
-                            <input type="radio" id="option3" name="correct-answer" value="3">
-                            <label for="optionText3"></label>
-                            <input type="text" id="optionText3" placeholder="ENTER OPTION 4 HERE">
-                        </div>
-                    </div>
-                    <div id="trueFalseAnswer" class="hidden">
-                        <div class="true-false-container">
-                            <div class="true-false-option">
-                                <input type="radio" id="trueOption" name="trueFalse" value="true">
-                                <label for="trueOption">True</label>
-                            </div>
-                            <div class="true-false-option">
-                                <input type="radio" id="falseOption" name="trueFalse" value="false">
-                                <label for="falseOption">False</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="submission-btn">
-                    <button type="button" class="prev-btn" onclick="previousStep(2)">Previous</button>
-                    <button type="button" class="submit-btn" onclick="submitQuestion()">Submit Question</button>
-                </div>
-            </div>
-
-            <div id="viewMode" class="form-section hidden">
-                <h2>Added Questions</h2>
-                <div id="questionsList"></div>
-            </div>
+            </a>
         </div>
     </div>
 
-    <div class="edit-section" id="edit-questions">
-        <h2>Past Papers</h2>
-        <div class="filter-search-container">
-            <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="Quick search...">
-                <button onclick="searchPapers()">Search</button>
-            </div>
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="content-section" id="dataAnalytics">
+            <h1>Data Analytics</h1>
+            <p>This is the default Data Analytics content area.</p>
         </div>
-        <div class="table-controls">
-            <div class="table-actions">
-                <button class="columns-btn">Columns</button>
-                <div class="filter-dropdown">
-                    <button id="filterToggle" onclick="toggleFilterDropdown()">Filters</button>
-                    <div id="filterPanel" class="filter-panel">
-                        <select id="filterGrade">
-                            <option value="">All Grades</option>
-                            <option value="7">Grade 7</option>
-                            <option value="9">Grade 9</option>
-                            <option value="12">Grade 12</option>
-                            <option value="alevels">A Levels</option>
-                        </select>
-                        <select id="filterSubject">
-                            <option value="">All Subjects</option>
-                        </select>
-                        <input type="number" id="filterYear" placeholder="Year" min="2000" max="2100">
-                        <input type="text" id="filterExamName" placeholder="Examination Name">
-                        <input type="text" id="filterTopic" placeholder="Topic">
-                        <input type="text" id="filterSubtopic" placeholder="Subtopic">
-                        <button onclick="filterPapers()">Apply Filters</button>
+        <div class="content-section hidden" id="notifications">
+            <header class="notifications-header">
+                <h2>Notifications</h2>
+                <button class="close-btn">×</button>
+            </header>
+        
+            <div class="notifications-filter">
+                <button class="filter-btn active" data-filter="all">General</button>
+                <button class="filter-btn" data-filter="read">Read</button>
+                <button class="filter-btn" data-filter="unread">Unread</button>
+            </div>
+            
+            <div class="notifications-list">
+                <div class="notification-item">
+                    <div class="notification-icon"></div>
+                    <div class="notification-content">
+                        <h3 class="notification-title">New Message</h3>
+                        <p class="notification-message">You have a new message from John</p>
+                        <span class="notification-time">2 minutes ago</span>
+                    </div>
+                    <button class="notification-dismiss">×</button>
+                </div>
+                
+                <div class="notification-item unread">
+                    <div class="notification-icon"></div>
+                    <div class="notification-content">
+                        <h3 class="notification-title">System Update</h3>
+                        <p class="notification-message">New version available</p>
+                        <span class="notification-time">1 hour ago</span>
+                    </div>
+                    <button class="notification-dismiss">×</button>
+                </div>
+            </div>
+            
+            <footer class="notifications-footer">
+                <button class="clear-all">Clear All</button>
+                <button class="see-more">See More</button>
+            </footer>
+        </div>
+        <div class="content-section hidden" id="messages">
+            <h1>Messages</h1>
+            <p>No messages to display yet.</p>
+        </div>
+    </div>
+
+    <!-- Right Panel -->
+    <div class="panel">
+        <div class="step-indicator">
+            <div class="step active" id="step1">1</div>
+            <div class="step-line"></div>
+            <div class="step" id="step2">2</div>
+        </div>
+        
+        <div class="content-wrapper">
+            <div class="center-content">
+                <!-- Examiner Form Group -->
+                <div class="form-container">
+                    <form id="questionForm">
+                        <div id="examinerDetails" class="form-section">
+                            <h2>Examination details</h2>
+                            <div class="examiner-field examiner-field-matrix">
+                                <div class="field-item">
+                                    <label for="examName">Name of the exam</label>
+                                    <input type="text" id="examName" placeholder="Enter exam name">
+                                </div>
+                                <div class="field-item">
+                                    <label for="PaperCode">SELECT PAPER</label>
+                                    <select id="PaperCode">
+                                        <option value="Paper 1">PAPER 1</option>
+                                        <option value="Paper 2">PAPER 2</option>
+                                        <option value="Paper 3">PAPER 3</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="examiner-field">
+                                <label for="examinerName">SOURCE OF THE EXAM</label>
+                                <input type="text" id="examinerName" placeholder="Enter exam source">
+                            </div>
+                            <div class="examiner-field date-grid">
+                                <label for="examDate">DATE OF THE EXAM</label>
+                                <div class="date-inputs">
+                                    <input type="number" id="examDay" placeholder="DAY" min="1" max="31">
+                                    <select id="examMonth">
+                                        <option value="" disabled selected>MONTH</option>
+                                        <option value="January">January</option>
+                                        <option value="February">February</option>
+                                        <option value="March">March</option>
+                                        <option value="April">April</option>
+                                        <option value="May">May</option>
+                                        <option value="June">June</option>
+                                        <option value="July">July</option>
+                                        <option value="August">August</option>
+                                        <option value="September">September</option>
+                                        <option value="October">October</option>
+                                        <option value="November">November</option>
+                                        <option value="December">December</option>
+                                    </select>
+                                    <select id="examYear">
+                                        <option value="" disabled selected>Year</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="field-item">
+                                <label for="Grade">SELECT GRADE</label>
+                                <select id="Grade">
+                                    <option value="Grade 7">Grade 7</option>
+                                    <option value="Grade 9">Grade 9</option>
+                                    <option value="Grade 12">Grade 12</option>
+                                    <option value="Custom">Custom</option>
+                                </select>
+                            </div>
+                            <div class="submission-btn">
+                                <button type="button" class="submit-btn" onclick="submitExaminerDetails()">Next</button>
+                            </div>
+                        </div>
+                        <div id="questionAnswerFlow" class="form-section hidden">
+                            <h2>Add Your Question and Answer</h2>
+                            <div class="question-prompt form-group">
+                                <label for="question">Question</label>
+                                <textarea id="question" placeholder="ENTER YOUR QUESTION HERE"></textarea>
+                            </div>
+                            <div class="question-source">
+                                <div class="Topic_source_field">
+                                    <label for="topic_name">Topic</label>
+                                    <input type="text" id="topic_name" placeholder="ENTER THE TOPIC NAME HERE">
+                                </div>
+                                <div class="Topic_source_field">
+                                    <label for="subtopic_name">Subtopic</label>
+                                    <input type="text" id="subtopic_name" placeholder="ENTER THE SUBTOPIC NAME HERE">
+                                </div>
+                            </div>
+                            <div class="answer-prompt form-group">
+                                <label for="answerSection">Answer:</label>
+                                <div id="answerSection">
+                                    <div id="essayAnswer" class="hidden">
+                                        <label for="essayInput">Essay Answer</label>
+                                        <textarea id="essayInput" placeholder="ENTER ESSAY ANSWER HERE"></textarea>
+                                    </div>
+                                    <div id="oneWordAnswer" class="hidden">
+                                        <label for="oneWordInput">One Word Answer</label>
+                                        <input type="text" id="oneWordInput" placeholder="ENTER ONE-WORD ANSWER HERE">
+                                    </div>
+                                    <div id="multipleChoiceAnswer" class="hidden">
+                                        <div class="multiple-choice-option">
+                                            <input type="radio" id="option0" name="correct-answer" value="0">
+                                            <label for="optionText0">Option 1</label>
+                                            <input type="text" id="optionText0" placeholder="ENTER OPTION 1 HERE">
+                                        </div>
+                                        <div class="multiple-choice-option">
+                                            <input type="radio" id="option1" name="correct-answer" value="1">
+                                            <label for="optionText1">Option 2</label>
+                                            <input type="text" id="optionText1" placeholder="ENTER OPTION 2 HERE">
+                                        </div>
+                                        <div class="multiple-choice-option">
+                                            <input type="radio" id="option2" name="correct-answer" value="2">
+                                            <label for="optionText2">Option 3</label>
+                                            <input type="text" id="optionText2" placeholder="ENTER OPTION 3 HERE">
+                                        </div>
+                                        <div class="multiple-choice-option">
+                                            <input type="radio" id="option3" name="correct-answer" value="3">
+                                            <label for="optionText3">Option 4</label>
+                                            <input type="text" id="optionText3" placeholder="ENTER OPTION 4 HERE">
+                                        </div>
+                                    </div>
+                                    <div id="trueFalseAnswer" class="hidden">
+                                        <div class="true-false-container">
+                                            <div class="true-false-option">
+                                                <input type="radio" id="trueOption" name="trueFalse" value="true">
+                                                <label for="trueOption">True</label>
+                                            </div>
+                                            <div class="true-false-option">
+                                                <input type="radio" id="falseOption" name="trueFalse" value="false">
+                                                <label for="falseOption">False</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="submission-btn">
+                                <button type="button" class="prev-btn" onclick="previousStep(1)">Previous</button>
+                                <button type="button" class="submit-btn" onclick="submitQuestion()">Submit Question</button>
+                            </div>
+                        </div>
+                        <div id="viewMode" class="form-section hidden">
+                            <h2>Added Questions</h2>
+                            <div id="questionsList"></div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Edit History Panel -->
+                <div class="edit-history-panel">
+                    <h3>Edit history</h3>
+                    <div class="history-timeline">
+                        <div class="timeline-line"></div>
+                        <div class="history-item">
+                            <div class="avatar">
+                                <div class="inner-circle"></div>
+                            </div>
+                            <div class="history-details">
+                                <div>
+                                    <span class="user-name">Mathematics</span>
+                                    <span class="timeline">· 02 Jul, 6:24 PM</span>
+                                </div>
+                                <div class="change-details">
+                                    <span class="action-type">Added:</span>
+                                    <span class="tag tag-publishing">Sets</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <button class="export-btn">Export</button>
             </div>
-        </div>
-        <table class="papers-table">
-            <thead>
-                <tr>
-                    <th><input type="checkbox" id="selectAll"></th>
-                    <th>Exam Name</th>
-                    <th>Year</th>
-                    <th>Grade</th>
-                    <th>Subject</th>
-                    <th>Topic</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="papersTableBody"></tbody>
-        </table>
-        <div class="pagination">
-            <select id="linesPerPage" onchange="updateLinesPerPage()">
-                <option value="15">15</option>
-                <option value="30">30</option>
-                <option value="50">50</option>
-            </select>
-            <button onclick="prevPage()">Previous</button>
-            <span id="pageInfo">1 of 1</span>
-            <button onclick="nextPage()">Next</button>
         </div>
     </div>
 
